@@ -11,7 +11,7 @@ export default function Hamburger() {
     if (session?.user) {
       return useGlobalStore.getState().setShowMainNavToggle();
     }
-    signIn();
+    signIn('google', { callbackUrl: '/' });
   };
 
   return (
