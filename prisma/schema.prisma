@@ -34,8 +34,11 @@ model Profile {
 
 model User {
   id      Int      @id @default(autoincrement())
+  sub     String   @unique
   email   String   @unique
-  name    String?
+  name    String
+  nickname String? @unique
+  picture String?
   posts   Post[]
   profile Profile?  
 }

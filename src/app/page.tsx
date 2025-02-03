@@ -1,4 +1,4 @@
-import CreateUserButton from './components/CreateUserButton';
+import CreateUserButton from './_components/CreateUserButton';
 
 export default function Home() {
   return (

@@ -12,7 +12,7 @@ importers:
         specifier: 6.3.0
         version: 6.3.0(prisma@6.3.0(typescript@5.7.3))(typescript@5.7.3)
       '@tanstack/react-query':
-        specifier: ^5.62.10
+        specifier: ^5.64.2
         version: 5.64.2(react@19.0.0)
       axios:
         specifier: ^1.7.9

@@ -1,4 +1,4 @@
-import useGlobalStore from '@/common/store/useGlobalState';
+import useGlobalStore from '@/index';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import React from 'react';
