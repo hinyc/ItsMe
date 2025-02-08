@@ -1,3 +1,4 @@
+import { queryClient } from '@/app/Providers';
 import useGlobalStore from '@/index';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
@@ -42,6 +43,7 @@ const NAVIGATION_LINK = [
   {
     action: () => {
       signOut();
+      queryClient.removeQueries();
     },
     name: 'Logout'
   }

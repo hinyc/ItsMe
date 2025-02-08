@@ -13,7 +13,8 @@ export default function Providers({
     <>
       <QueryClientProvider client={queryClient}>
         {/* <SessionProvider> */}
-        <div className="h-full w-full">{children}</div>;{/* </SessionProvider> */}
+        <div className="h-full w-full">{children}</div>
+        {/* </SessionProvider> */}
       </QueryClientProvider>
     </>
   );

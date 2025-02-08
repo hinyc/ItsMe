@@ -1,5 +1,12 @@
 import { NextAuthConfig } from 'next-auth';
 import Google from 'next-auth/providers/google';
+
+declare module 'next-auth' {
+  interface User {
+    sub?: string;
+    provider: 'google';
+  }
+}
 // import log from "logging-service";
 
 export default {
@@ -13,6 +20,17 @@ export default {
           access_type: 'offline',
           response_type: 'code'
         }
+      },
+      profile: async (profile) => {
+        return {
+          id: profile.sub,
+          name: profile.name,
+          email: profile.email,
+          image: profile.picture,
+          sub: profile.sub,
+          provider: 'google'
+          // 추가로 원하는 사용자 정보를 여기에 포함할 수 있습니다
+        };
       }
     })
   ],
@@ -20,8 +38,7 @@ export default {
   callbacks: {
     jwt: async ({ token, user }) => {
       if (user) {
-        token.memberId = user.id;
-        token.sid = user.id;
+        token.sub = user.sub;
       }
       return token;
     },

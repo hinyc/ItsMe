@@ -10,7 +10,14 @@ export async function GET() {
       status: 'NO_USER'
     };
 
-    console.log('session', session?.user);
+    if (!session) {
+      return new Response(JSON.stringify(user), {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        status: 404
+      });
+    }
 
     const userInfo = await prisma.user.findFirst({
       where: {
@@ -18,7 +25,10 @@ export async function GET() {
       }
     });
 
-    if (session && !userInfo) {
+    console.log(session.user.id);
+    console.log(userInfo);
+
+    if (!userInfo) {
       //nickname 미등록 계정
       return new Response(
         JSON.stringify({
@@ -33,18 +43,10 @@ export async function GET() {
       );
     }
 
-    if (!userInfo) {
-      return new Response(JSON.stringify({ error: 'NO_USER' }), {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        status: 400
-      });
-    }
-
     user.nickname = userInfo.nickname?.toString();
     user.email = userInfo.email?.toString();
-    user.image = userInfo.picture?.toString();
+    user.image = userInfo.image?.toString();
+    user.status = 'NORMAL';
 
     return new Response(JSON.stringify(user), {
       headers: {

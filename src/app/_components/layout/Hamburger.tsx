@@ -5,9 +5,12 @@ import { signIn } from 'next-auth/react';
 import { useQueryUser } from '@/query';
 
 export default function Hamburger() {
-  const { data: user } = useQueryUser();
+  const { data: user, refetch } = useQueryUser();
 
-  const _onClick = () => {
+  console.log('user', user);
+
+  const _onClick = async () => {
+    refetch();
     if (user?.status === 'NORMAL') {
       return useGlobalStore.getState().setShowMainNavToggle();
     }
@@ -18,6 +21,9 @@ export default function Hamburger() {
   useEffect(() => {
     if (user?.status === 'NEED_NICKNAME') {
       useGlobalStore.getState().setShowNeedNicknameModal(true);
+    }
+    if (user?.status === 'NORMAL') {
+      useGlobalStore.getState().setShowNeedNicknameModal(false);
     }
   }, [user]);
 

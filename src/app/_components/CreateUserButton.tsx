@@ -17,7 +17,7 @@ export default function CreateUserButton() {
     //   console.error('Error creating user:', error);
     // }
 
-    api.get('/userInfo');
+    console.log(await api.get('/user'));
   }
 
   return <button onClick={createUser}>Create User</button>;
