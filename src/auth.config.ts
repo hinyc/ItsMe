@@ -29,7 +29,6 @@ export default {
           image: profile.picture,
           sub: profile.sub,
           provider: 'google'
-          // 추가로 원하는 사용자 정보를 여기에 포함할 수 있습니다
         };
       }
     })

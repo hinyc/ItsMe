@@ -72,6 +72,7 @@ export default function NavMenu() {
               <Link
                 key={index}
                 href={item?.route ?? '/'}
+                onClick={() => setShowMainNavToggle()}
                 className="text-shadow-sm hover:text-shadow-md"
               >
                 {item.name}
