@@ -7,8 +7,6 @@ import { useQueryUser } from '@/query';
 export default function Hamburger() {
   const { data: user, refetch } = useQueryUser();
 
-  console.log('user', user);
-
   const _onClick = async () => {
     refetch();
     if (user?.status === 'NORMAL') {

@@ -1,12 +1,9 @@
-import CreateUserButton from './_components/CreateUserButton';
+import Home from './_components/Home';
 
-export default function Home() {
+export default function Page() {
   return (
     <div>
-      Main
-      <div>
-        <CreateUserButton />
-      </div>
+      <Home />
     </div>
   );
 }
