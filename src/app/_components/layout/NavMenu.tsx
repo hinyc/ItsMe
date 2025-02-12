@@ -62,9 +62,7 @@ export default function NavMenu() {
         <div
           className={`flex flex-col items-end justify-center overflow-hidden px-2 transition-all ${showMainNav ? 'h-[180px]' : 'h-0'} space-y-2 text-stone-500`}
         >
-          <span className="select-none font-extrabold tracking-widest text-stone-400">
-            IT&apos;S ME
-          </span>
+          <span className="logo">IT&apos;S ME</span>
           {NAVIGATION_LINK.map((item, index) => {
             return item.type === 'link' ? (
               <Link key={index} href={item?.route ?? '/'} onClick={() => setShowMainNavToggle()}>

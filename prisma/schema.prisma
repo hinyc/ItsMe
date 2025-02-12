@@ -14,31 +14,86 @@ datasource db {
   directUrl = env("POSTGRES_URL_NON_POOLING")
 }
 
-model Post {
-  id        Int      @id @default(autoincrement())
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
-  title     String   @db.VarChar(255)
-  content   String?
-  published Boolean  @default(false)
-  author    User     @relation(fields: [authorId], references: [id])
-  authorId  Int
-}
-
-model Profile {
-  id     Int     @id @default(autoincrement())
-  bio    String?
-  user   User    @relation(fields: [userId], references: [id])
-  userId Int     @unique
-}
 
 model User {
-  id      Int      @id @default(autoincrement())
-  sub     String   @unique
-  email   String   @unique
-  name    String
-  nickname String? @unique
-  image String?
-  posts   Post[]
-  profile Profile?  
+  id            Int      @id @default(autoincrement())
+  sub           String   @unique
+  name          String?
+  nickname      String   
+  email         String   @unique
+  image         String?
+  personalUrl   String?  @default(uuid())
+  isPremium     Boolean  @default(false)
+  createdAt     DateTime @default(now())
+  updatedAt     DateTime @updatedAt
+
+  auth          UserAuth?
+  links         UserLink[]
+  photos        UserPhoto[]
+  subscription  Subscription?
+}
+
+model UserAuth {
+  userId       Int      @id @map("user_id")
+  passwordHash String
+  provider     AuthProvider
+  lastLogin    DateTime?
+
+  user         User     @relation(fields: [userId], references: [id])
+}
+
+enum AuthProvider {
+  google
+  kakao
+  naver
+  instagram
+  apple
+  github
+}
+
+model UserLink {
+  id       Int      @id @default(autoincrement())
+  userId   Int
+  linkType LinkType
+  linkName String
+  url      String
+
+  user     User     @relation(fields: [userId], references: [id])
+}
+
+enum LinkType {
+  sns
+  website
+  etc
+}
+
+model UserPhoto {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  photoUrl  String
+  uploadedAt DateTime @default(now())
+
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+model Subscription {
+  userId    Int      @id @map("user_id")
+  planType  PlanType
+  startDate DateTime
+  endDate   DateTime?
+  status    SubscriptionStatus
+
+  user      User     @relation(fields: [userId], references: [id])
+}
+
+enum PlanType {
+  free
+  basic
+  premium
+}
+
+enum SubscriptionStatus {
+  active
+  canceled
+  expired
 }

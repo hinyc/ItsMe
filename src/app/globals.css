@@ -6,6 +6,11 @@
   --background: #ffffff;
   --foreground: #171717;
   --tw-shadow-color: var(--background);
+
+  /* Logo styles */
+  --logo-font-weight: 800;
+  --logo-text-color: #a8a29e;
+  --logo-letter-spacing: 0.1em;
 }
 
 @media (prefers-color-scheme: dark) {
@@ -19,4 +24,11 @@ body {
   color: var(--foreground);
   background: var(--background);
   font-family: Arial, Helvetica, sans-serif;
+}
+
+.logo {
+  font-weight: var(--logo-font-weight);
+  text-decoration: none;
+  letter-spacing: var(--logo-letter-spacing);
+  color: var(--logo-text-color);
 }
