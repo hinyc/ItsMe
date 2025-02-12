@@ -13,7 +13,7 @@ interface Link {
 
 export default function Links() {
   const [links, setLinks] = useState<Link[]>(defaultLinks);
-
+  console.log(setLinks);
   return (
     <div>
       <h1 className="logo">IT&apos;S LINKS</h1>
