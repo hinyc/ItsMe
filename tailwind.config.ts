@@ -10,7 +10,14 @@ export default {
     extend: {
       colors: {
         background: 'var(--background)',
-        foreground: 'var(--foreground)'
+        foreground: 'var(--foreground)',
+        me: {
+          main: '#e7e5e4',
+          point: '#e7e5e4',
+          highlight: '#ff5f00',
+          focus: '#0085ff',
+          disabled: '#b3b3b3'
+        }
       }
     }
   }
