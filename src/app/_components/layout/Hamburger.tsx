@@ -9,7 +9,7 @@ export default function Hamburger() {
 
   const _onClick = async () => {
     refetch();
-    if (user?.status === 'NORMAL') {
+    if (user?.info?.status === 'NORMAL') {
       return useGlobalStore.getState().setShowMainNavToggle();
     }
 
@@ -17,10 +17,10 @@ export default function Hamburger() {
   };
 
   useEffect(() => {
-    if (user?.status === 'NEED_NICKNAME') {
+    if (user?.info?.status === 'NEED_NICKNAME') {
       useGlobalStore.getState().setShowNeedNicknameModal(true);
     }
-    if (user?.status === 'NORMAL') {
+    if (user?.info?.status === 'NORMAL') {
       useGlobalStore.getState().setShowNeedNicknameModal(false);
     }
   }, [user]);
@@ -30,7 +30,7 @@ export default function Hamburger() {
       className="absolute right-0 top-0 flex h-8 w-8 cursor-pointer select-none items-center justify-center rounded-md bg-zinc-100 opacity-65 transition-all hover:opacity-100"
       onClick={_onClick}
     >
-      {user?.status === 'NORMAL' ? <FaBars /> : <FaRegCircleUser />}
+      {user?.info?.status === 'NORMAL' ? <FaBars /> : <FaRegCircleUser />}
     </button>
   );
 }

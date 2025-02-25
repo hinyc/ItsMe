@@ -7,8 +7,8 @@ export default function RedirectToMe() {
   console.log(data);
 
   useEffect(() => {
-    if (!data?.personalUrl) return;
-    window.location.href = data.personalUrl;
+    if (!data?.info?.personalUrl) return;
+    window.location.href = data.info.personalUrl;
   }, [data]);
   return null;
 }

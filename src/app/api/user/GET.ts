@@ -1,16 +1,20 @@
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
-import { IUser } from '@/types';
+import { ILink, IUser, IUserInfo } from '@/types';
 
 export async function GET() {
   try {
     const session = await auth();
 
-    const user: IUser = {
+    const info: IUserInfo = {
       nickname: 'nickname',
       status: 'NO_USER',
       personalUrl: 'me/'
     };
+
+    const links: ILink[] = [];
+
+    const user: IUser = { info, links, isLogin: false };
 
     if (!session) {
       return new Response(JSON.stringify(user), {
@@ -45,13 +49,13 @@ export async function GET() {
       );
     }
 
-    user.nickname = userInfo.nickname?.toString();
-    user.email = userInfo.email?.toString();
-    user.image = userInfo.image?.toString();
-    user.status = 'NORMAL';
-    user.personalUrl = '/me/' + userInfo.personalUrl?.toString();
+    info.nickname = userInfo.nickname?.toString();
+    info.email = userInfo.email?.toString();
+    info.image = userInfo.image?.toString();
+    info.status = 'NORMAL';
+    info.personalUrl = '/me/' + userInfo.personalUrl?.toString();
 
-    return new Response(JSON.stringify(user), {
+    return new Response(JSON.stringify(info), {
       headers: {
         'Content-Type': 'application/json'
       }
@@ -65,3 +69,8 @@ export async function GET() {
     });
   }
 }
+
+//return interface
+//user 정보
+//sns 정보
+//picture 정보
