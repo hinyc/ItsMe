@@ -2,7 +2,7 @@ import { IUser } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
 
-export const useQueryUser = () => {
+const useUser = () => {
   return useQuery<IUser>({
     queryKey: ['user'],
     queryFn: async () => {
@@ -12,3 +12,9 @@ export const useQueryUser = () => {
     }
   });
 };
+
+const userGlobalQuery = {
+  useUser
+};
+
+export default userGlobalQuery;

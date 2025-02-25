@@ -44,7 +44,7 @@ const NAVIGATION_LINK = [
   }
 ];
 
-export default function NavMenu() {
+export default function HeaderMenu() {
   const { showMainNav, setShowMainNavToggle } = useGlobalStore();
   //todo
   //메뉴가 나왓다 들어갔다 하는건 귀찬을수도

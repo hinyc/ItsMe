@@ -1,17 +1,17 @@
 import api from '@/common/api';
-import useGlobalStore from '@/index';
-import { useQueryUser } from '@/query';
 import { signOut } from 'next-auth/react';
 import React, { useRef } from 'react';
 import { FaXmark } from 'react-icons/fa6';
+import userGlobalQuery from '@/query';
+import useGlobalStore from '@/index';
 
 export default function NeedNicknameModal() {
-  const { refetch } = useQueryUser();
+  const { refetch } = userGlobalQuery.useUser();
   const nicknameRef = useRef<HTMLInputElement>(null);
   const _onSubmit = () => {
     if (nicknameRef.current?.value) {
       api
-        .post('/user/resist', {
+        .post('/user', {
           nickname: nicknameRef.current.value
         })
         .then(() => {

@@ -2,10 +2,10 @@ import useGlobalStore from '@/index';
 import { FaBars, FaRegCircleUser } from 'react-icons/fa6';
 import React, { useEffect } from 'react';
 import { signIn } from 'next-auth/react';
-import { useQueryUser } from '@/query';
+import userGlobalQuery from '@/query';
 
 export default function Hamburger() {
-  const { data: user, refetch } = useQueryUser();
+  const { data: user, refetch } = userGlobalQuery.useUser();
 
   const _onClick = async () => {
     refetch();
