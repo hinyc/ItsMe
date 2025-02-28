@@ -27,17 +27,17 @@ export async function POST(request: NextRequest) {
 
     //이미 등록된 유저인지 체크
 
-    const userInfo = {
+    const userInfoParams = {
       name: session?.user.name,
       email: session?.user.email,
       image: session?.user.image,
       sub: session?.user.id,
       ...payload
     };
-    console.log('payload', userInfo);
+    console.log('payload', userInfoParams);
 
     const user = await prisma.user.create({
-      data: userInfo
+      data: userInfoParams
     });
 
     console.log('user', user);
@@ -52,16 +52,7 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    if (user.sub !== session?.user.id) {
-      return new Response(JSON.stringify({ error: 'User not found' }), {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        status: 400
-      });
-    }
-
-    return new Response(JSON.stringify('ok'), {
+    return new Response(JSON.stringify({ info: user }), {
       headers: {
         'Content-Type': 'application/json'
       }

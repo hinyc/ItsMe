@@ -4,29 +4,37 @@ import React, { useRef } from 'react';
 import { FaXmark } from 'react-icons/fa6';
 import userGlobalQuery from '@/query';
 import useGlobalStore from '@/index';
+import { useRouter } from 'next/navigation';
+import { IUser } from '@/types';
 
-export default function NeedNicknameModal() {
+export default function SignUpModal() {
   const { refetch } = userGlobalQuery.useUser();
   const nicknameRef = useRef<HTMLInputElement>(null);
+  const router = useRouter();
   const _onSubmit = () => {
     if (nicknameRef.current?.value) {
       api
         .post('/user', {
           nickname: nicknameRef.current.value
         })
-        .then(() => {
+        .then((res) => {
+          const { info } = res.data as unknown as IUser;
           refetch();
+
+          console.log('info!!', res);
+          useGlobalStore.getState().setShowSignUpModal(false);
+          router.push(`/me/${info.personalUrl}`);
         });
     }
   };
 
   const _onClose = () => {
     signOut();
-    useGlobalStore.getState().setShowNeedNicknameModal(false);
+    useGlobalStore.getState().setShowSignUpModal(false);
   };
   return (
     <div className="fixed left-0 top-0 flex h-full w-full items-center justify-center bg-slate-100 bg-opacity-50">
-      <div className="relative flex h-fit w-[250px] select-none flex-col items-center justify-start rounded-md bg-gray-100 p-4 opacity-65 shadow-xl">
+      <div className="relative flex h-fit w-[250px] select-none flex-col items-center justify-start rounded-md bg-gray-100 p-4 shadow-xl">
         <h1 className="font-bold">닉네임을 입력해주세요</h1>
         <input
           className="mt-4 h-10 w-full rounded-md text-center focus:outline-none"

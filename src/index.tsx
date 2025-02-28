@@ -2,24 +2,24 @@ import { create } from 'zustand';
 
 interface IGlobalState {
   showMainNav: boolean;
-  showNeedNicknameModal: boolean;
+  showSignUpModal: boolean;
 }
 
 interface IGlobalSetState {
   setShowMainNavToggle: () => void;
-  setShowNeedNicknameModal: (value: boolean) => void;
+  setShowSignUpModal: (value: boolean) => void;
 }
 
 const initState: IGlobalState = {
   showMainNav: false,
-  showNeedNicknameModal: false
+  showSignUpModal: false
 };
 
 const useGlobalStore = create<IGlobalState & IGlobalSetState>((set, get) => ({
   ...initState,
 
   setShowMainNavToggle: () => set({ showMainNav: !get().showMainNav }),
-  setShowNeedNicknameModal: (value) => set({ showNeedNicknameModal: value })
+  setShowSignUpModal: (value) => set({ showSignUpModal: value })
 }));
 
 export default useGlobalStore;

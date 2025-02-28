@@ -7,16 +7,14 @@ export async function GET() {
     const session = await auth();
 
     const info: IUserInfo = {
-      nickname: 'nickname',
-      status: 'NO_USER',
-      personalUrl: 'me/'
+      nickname: 'nickname'
     };
 
     const links: ILink[] = [];
 
     const user: IUser = { info, links, isLogin: false };
 
-    if (!session) {
+    if (!session?.user.id) {
       return new Response(JSON.stringify(user), {
         headers: {
           'Content-Type': 'application/json'
@@ -31,31 +29,22 @@ export async function GET() {
       }
     });
 
-    console.log(session.user.id);
-    console.log(userInfo);
-
     if (!userInfo) {
       //nickname 미등록 계정
-      return new Response(
-        JSON.stringify({
-          status: 'NEED_NICKNAME'
-        }),
-        {
-          headers: {
-            'Content-Type': 'application/json'
-          },
-          status: 200
-        }
-      );
+      return new Response('Unauthorized', {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        status: 401
+      });
     }
 
     info.nickname = userInfo.nickname?.toString();
     info.email = userInfo.email?.toString();
     info.image = userInfo.image?.toString();
-    info.status = 'NORMAL';
-    info.personalUrl = '/me/' + userInfo.personalUrl?.toString();
+    info.personalUrl = userInfo.personalUrl?.toString();
 
-    return new Response(JSON.stringify(info), {
+    return new Response(JSON.stringify(user), {
       headers: {
         'Content-Type': 'application/json'
       }
