@@ -16,10 +16,6 @@ const useAuth = () => {
 };
 
 const useUser = () => {
-  const { personalUrl } = usePathname();
-
-  console.log('personalUrl', personalUrl);
-
   return useQuery<IUser>({
     queryKey: ['user'],
     queryFn: async () => {
