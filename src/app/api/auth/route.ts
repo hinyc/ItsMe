@@ -9,7 +9,8 @@ export async function GET() {
     const auth: IAuth = {
       nickname: '',
       email: '',
-      personalUrl: ''
+      personalUrl: '',
+      isAuthenticated: false
     };
 
     if (!session?.user?.id) {
@@ -30,6 +31,7 @@ export async function GET() {
     auth.nickname = userInfo?.nickname?.toString();
     auth.email = userInfo?.email?.toString();
     auth.personalUrl = userInfo?.personalUrl?.toString();
+    auth.isAuthenticated = true;
 
     return new Response(JSON.stringify(auth), {
       headers: {

@@ -9,10 +9,13 @@ import { IUser } from '@/types';
 
 export default function SignUpModal() {
   const { refetch } = userGlobalQuery.useUser();
+
   const nicknameRef = useRef<HTMLInputElement>(null);
   const router = useRouter();
   const _onSubmit = () => {
     if (nicknameRef.current?.value) {
+      //가입요청
+      //성공시 user 정보 refetch
       api
         .post('/user', {
           nickname: nicknameRef.current.value

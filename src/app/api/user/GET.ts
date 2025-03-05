@@ -4,6 +4,8 @@ import { ILink, IUser, IUserInfo } from '@/types';
 
 export async function GET() {
   try {
+    //sub 확인
+
     const session = await auth();
 
     const info: IUserInfo = {
@@ -14,6 +16,7 @@ export async function GET() {
 
     const user: IUser = { info, links, isLogin: false };
 
+    //session에 로그인된 사용자 정보가 없을 때, 비정상
     if (!session?.user.id) {
       return new Response(JSON.stringify(user), {
         headers: {
@@ -29,6 +32,7 @@ export async function GET() {
       }
     });
 
+    //user 정보가 없을 때, 가입안된상태
     if (!userInfo) {
       //nickname 미등록 계정
       return new Response('Unauthorized', {
@@ -39,6 +43,7 @@ export async function GET() {
       });
     }
 
+    //user 정보를 로드하고 특정 정보만 반환
     info.nickname = userInfo.nickname?.toString();
     info.email = userInfo.email?.toString();
     info.image = userInfo.image?.toString();
