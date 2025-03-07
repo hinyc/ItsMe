@@ -26,12 +26,20 @@ export async function POST(request: NextRequest) {
     }
 
     //이미 등록된 유저인지 체크
+    if (!session) {
+      return new Response(JSON.stringify({ error: 'No session' }), {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        status: 400
+      });
+    }
 
     const userInfoParams = {
-      name: session?.user.name,
-      email: session?.user.email,
-      image: session?.user.image,
-      sub: session?.user.id,
+      name: session.user.name,
+      email: session.user.email,
+      image: session.user.image,
+      sub: session.user.id,
       ...payload
     };
     console.log('payload', userInfoParams);
@@ -59,6 +67,7 @@ export async function POST(request: NextRequest) {
     });
   } catch (error) {
     return new Response(JSON.stringify({ error: error }), {
+      status: 401,
       headers: {
         'Content-Type': 'application/json'
       }
