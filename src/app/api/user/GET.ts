@@ -14,7 +14,7 @@ export async function GET() {
 
     const links: ILink[] = [];
 
-    const user: IUser = { info, links, isLogin: false };
+    const user: IUser = { info, links };
 
     //session에 로그인된 사용자 정보가 없을 때, 비정상
     if (!session?.user.id) {

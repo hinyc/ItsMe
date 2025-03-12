@@ -1,6 +1,6 @@
+import useMeStore from '@/app/me/_store';
 import React from 'react';
 import { IconType } from 'react-icons';
-import useMeStore from '../../_store';
 
 interface URLBoxProps {
   name: string;

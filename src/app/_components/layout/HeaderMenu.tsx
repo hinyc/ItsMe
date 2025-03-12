@@ -1,7 +1,9 @@
 import { queryClient } from '@/app/Providers';
 import useGlobalStore from '@/index';
+import userGlobalQuery from '@/query';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
+import { useRouter } from 'next/navigation';
 import React from 'react';
 
 const NAVIGATION_LINK = [
@@ -46,6 +48,10 @@ const NAVIGATION_LINK = [
 
 export default function HeaderMenu() {
   const { showMainNav, setShowMainNavToggle } = useGlobalStore();
+
+  const { data: user } = userGlobalQuery.useUser();
+
+  const route = useRouter();
   //todo
   //메뉴가 나왓다 들어갔다 하는건 귀찬을수도
   //메우 단순한 페이진다 과한듯함 더 단순하게 해보자
@@ -62,7 +68,9 @@ export default function HeaderMenu() {
         <div
           className={`flex flex-col items-end justify-center overflow-hidden px-2 transition-all ${showMainNav ? 'h-[180px]' : 'h-0'} space-y-2 text-stone-500`}
         >
-          <span className="logo">IT&apos;S ME</span>
+          <button className="logo" onClick={() => route.push(user?.info.personalUrl ?? '/')}>
+            IT&apos;S ME
+          </button>
           {NAVIGATION_LINK.map((item, index) => {
             return item.type === 'link' ? (
               <Link key={index} href={item?.route ?? '/'} onClick={() => setShowMainNavToggle()}>
