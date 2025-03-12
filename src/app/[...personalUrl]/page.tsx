@@ -1,7 +1,9 @@
-import Profile from '@/app/me/_components/Profile';
-import Links from '@/app/me/_components/Links';
+'use client';
+
+import Profile from '@/app/[...personalUrl]/_components/Profile';
+import Links from '@/app/[...personalUrl]/_components/Links';
 import React from 'react';
-import ModifyButton from '../me/_components/ModifyButton';
+import ModifyButton from './_components/ModifyButton';
 
 export default function ItsMe() {
   return (

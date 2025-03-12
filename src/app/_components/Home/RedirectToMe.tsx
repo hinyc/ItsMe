@@ -16,7 +16,7 @@ export default function RedirectToMe() {
     }
 
     if (!auth.data?.personalUrl) return;
-    router.push(`/me/${auth.data.personalUrl}`);
+    router.push(`/${auth.data.personalUrl}`);
   }, [auth.data, auth.isLoading, router]);
   return null;
 }

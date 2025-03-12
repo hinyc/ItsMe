@@ -1,8 +1,8 @@
 'use client';
 import React, { useState } from 'react';
 import { RiInstagramLine } from 'react-icons/ri';
-import URLBox from './URLBox';
-import useMeStore from '../_store';
+import URLBox from '../../me/_components/URLBox';
+import useMeStore from '../../me/_store';
 
 //sns - instagram, facebook, twitter, linkedin, github, blog, wechat, tictok, thread etc.
 
@@ -13,9 +13,8 @@ interface Link {
 }
 
 export default function Links() {
-  const [links, setLinks] = useState<Link[]>(defaultLinks);
+  const [links] = useState<Link[]>(defaultLinks);
   const { edit } = useMeStore();
-  console.log(setLinks);
   return (
     <div>
       <h1 className="logo mb-4">IT&apos;S LINKS</h1>

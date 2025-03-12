@@ -1,7 +1,6 @@
 import { IAuth, IUser } from '@/types';
 import { useQuery } from '@tanstack/react-query';
 import axios from 'axios';
-import { usePathname } from 'next/navigation';
 
 const useAuth = () => {
   return useQuery<IAuth>({
