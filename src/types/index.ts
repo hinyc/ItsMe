@@ -16,6 +16,7 @@ export interface IUserInfo {
   nickname: string;
   email?: string;
   image?: string;
+  phone?: string;
   personalUrl?: string;
 }
 

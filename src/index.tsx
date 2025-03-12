@@ -15,7 +15,7 @@ const initState: IGlobalState = {
   showSignUpModal: false
 };
 
-const useGlobalStore = create<IGlobalState & IGlobalSetState>((set, get) => ({
+const useGlobalStore = create<IGlobalState & IGlobalSetState>((set) => ({
   ...initState,
 
   setShowMainNav: (value) => set({ showMainNav: value }),
