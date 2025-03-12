@@ -1,8 +1,10 @@
 'use client';
 import React from 'react';
 import useMeStore from '../../me/_store';
+import useGlobalStore from '@/index';
 
 export default function ModifyButton() {
+  const { setShowMainNav } = useGlobalStore();
   const { edit, setEdit } = useMeStore();
   return (
     <button

@@ -47,7 +47,7 @@ const NAVIGATION_LINK = [
 ];
 
 export default function HeaderMenu() {
-  const { showMainNav, setShowMainNavToggle } = useGlobalStore();
+  const { showMainNav, setShowMainNav } = useGlobalStore();
 
   const { data: user } = userGlobalQuery.useUser();
 
@@ -60,7 +60,7 @@ export default function HeaderMenu() {
     e: React.TouchEvent<HTMLDivElement> | React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     e.stopPropagation();
-    setShowMainNavToggle();
+    setShowMainNav(false);
   };
   return (
     <>
@@ -68,12 +68,18 @@ export default function HeaderMenu() {
         <div
           className={`flex flex-col items-end justify-center overflow-hidden px-2 transition-all ${showMainNav ? 'h-[180px]' : 'h-0'} space-y-2 text-stone-500`}
         >
-          <button className="logo" onClick={() => route.push(user?.info.personalUrl ?? '/')}>
+          <button
+            className="logo"
+            onClick={() => {
+              route.push(user?.info.personalUrl ?? '/');
+              setShowMainNav(false);
+            }}
+          >
             IT&apos;S ME
           </button>
           {NAVIGATION_LINK.map((item, index) => {
             return item.type === 'link' ? (
-              <Link key={index} href={item?.route ?? '/'} onClick={() => setShowMainNavToggle()}>
+              <Link key={index} href={item?.route ?? '/'} onClick={() => setShowMainNav(false)}>
                 {item.name}
               </Link>
             ) : (

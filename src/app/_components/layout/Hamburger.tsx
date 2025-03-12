@@ -6,10 +6,11 @@ import userGlobalQuery from '@/query';
 
 export default function Hamburger() {
   const auth = userGlobalQuery.useAuth();
+  const { setShowMainNav, showMainNav } = useGlobalStore();
 
   const _onClick = async () => {
     if (auth.data?.isAuthenticated) {
-      return useGlobalStore.getState().setShowMainNavToggle();
+      return setShowMainNav(!showMainNav);
     }
 
     signIn('google', { callbackUrl: '/' });

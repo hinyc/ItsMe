@@ -6,7 +6,7 @@ interface IGlobalState {
 }
 
 interface IGlobalSetState {
-  setShowMainNavToggle: () => void;
+  setShowMainNav: (value: boolean) => void;
   setShowSignUpModal: (value: boolean) => void;
 }
 
@@ -18,7 +18,7 @@ const initState: IGlobalState = {
 const useGlobalStore = create<IGlobalState & IGlobalSetState>((set, get) => ({
   ...initState,
 
-  setShowMainNavToggle: () => set({ showMainNav: !get().showMainNav }),
+  setShowMainNav: (value) => set({ showMainNav: value }),
   setShowSignUpModal: (value) => set({ showSignUpModal: value })
 }));
 
