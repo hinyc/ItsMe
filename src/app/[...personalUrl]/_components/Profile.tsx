@@ -13,16 +13,18 @@ export default function Profile() {
 
   return (
     <div className="flex w-full flex-col items-center justify-center py-8">
-      <Image
-        width={150}
-        height={150}
-        src={
-          user?.info.image ||
-          profileImage.find((image) => image.name === 'placeholder_outline')!.url
-        }
-        alt="profile image"
-        className="mb-2 h-[150px] w-[150px] rounded-lg border-[1px] border-[#cdcfd6] bg-gray-400"
-      ></Image>
+      <div className="flex h-[150px] w-[150px] items-center justify-center overflow-hidden rounded-lg shadow-md">
+        <Image
+          width={152}
+          height={152}
+          src={
+            user?.info.image ||
+            profileImage.find((image) => image.name === 'placeholder_outline')!.url
+          }
+          alt="profile image"
+          className="mb-2 h-[152px] w-[152px]"
+        />
+      </div>
       <div className="text-xl font-bold">{user?.info.nickname}</div>
 
       {user?.info.phone && (
