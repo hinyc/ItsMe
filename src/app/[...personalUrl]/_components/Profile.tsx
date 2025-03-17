@@ -1,3 +1,4 @@
+import { profileImage } from '@/common/constant/profieImage';
 import userGlobalQuery from '@/query';
 import Image from 'next/image';
 import React from 'react';
@@ -15,9 +16,12 @@ export default function Profile() {
       <Image
         width={150}
         height={150}
-        src={user?.info.image || '/placeholder.png'}
+        src={
+          user?.info.image ||
+          profileImage.find((image) => image.name === 'placeholder_outline')!.url
+        }
         alt="profile image"
-        className="mb-2 h-[150px] w-[150px] rounded-lg bg-gray-400"
+        className="mb-2 h-[150px] w-[150px] rounded-lg border-[1px] border-[#cdcfd6] bg-gray-400"
       ></Image>
       <div className="text-xl font-bold">{user?.info.nickname}</div>
 

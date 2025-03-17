@@ -1,6 +1,6 @@
 'use client';
 import React from 'react';
-import useMeStore from '../../me/_store';
+import useMeStore from '../_store';
 import useGlobalStore from '@/index';
 
 export default function ModifyButton() {

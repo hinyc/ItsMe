@@ -1,6 +1,7 @@
-import useMeStore from '@/app/me/_store';
 import React from 'react';
 import { IconType } from 'react-icons';
+import useMeStore from '../_store';
+import { PiLinkSimple } from 'react-icons/pi';
 
 interface URLBoxProps {
   name: string;
@@ -10,16 +11,47 @@ interface URLBoxProps {
 }
 export default function URLBox({ name, url, onChange, icon: Icon }: URLBoxProps) {
   const { edit } = useMeStore();
+  const openUrl = () => {
+    window.open(url, '_blank');
+  };
   return (
-    <div>
-      <div className="flex">
+    <div className={edit ? 'w-full' : 'w-fit'}>
+      <div className="relative flex h-fit">
+        {!edit && (
+          <a
+            className="absolute z-10 h-full w-full"
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+          />
+        )}
         <Icon className="mr-1 h-5 w-5" />
-        <span className="font-semibold capitalize">{name}</span>
+        <input
+          className={`font-semibold capitalize outline-none focus:border-me-highlight focus:outline-none disabled:bg-transparent ${edit ? 'mb-1 w-[120px] border-b-2 border-me-main transition-all' : 'max-w-[100px]'}`}
+          disabled={!edit}
+          value={name}
+          onClick={() => {
+            console.log('click');
+            if (!edit) {
+              openUrl();
+            }
+          }}
+          onChange={(e) => {
+            if (edit) {
+              onChange(e);
+            }
+          }}
+        />
       </div>
       {edit && (
-        <div>
-          <span className="mr-1 text-stone-400">URL</span>
-          <input className="" type="text" value={url} onChange={onChange} />
+        <div className="flex items-center pl-6">
+          <PiLinkSimple className="mr-1 h-4 w-4" />
+          <input
+            className="w-[calc(100%-40px)] border-b-2 border-me-main px-1 outline-none transition-all focus:border-me-highlight focus:outline-none"
+            type="text"
+            value={url}
+            onChange={onChange}
+          />
         </div>
       )}
     </div>
