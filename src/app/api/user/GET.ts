@@ -17,14 +17,6 @@ export async function GET() {
     const user: IUser = { info, links };
 
     //session에 로그인된 사용자 정보가 없을 때, 비정상
-    if (!session?.user.id) {
-      return new Response(JSON.stringify(user), {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        status: 404
-      });
-    }
 
     const userInfo = await prisma.user.findFirst({
       where: {
@@ -48,6 +40,10 @@ export async function GET() {
     info.email = userInfo.email?.toString();
     info.image = userInfo.image?.toString();
     info.personalUrl = userInfo.personalUrl?.toString();
+
+    if (session?.user.id) {
+      //session이 있으면 info에 추가 정보를 넣어준다
+    }
 
     return new Response(JSON.stringify(user), {
       headers: {
