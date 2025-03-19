@@ -31,7 +31,7 @@ export default function Profile() {
       <div>
         <div className="flex h-7 items-center text-xl font-bold">
           <BiLabel className="mr-2" />
-          <div className="h-7 w-56 text-center">
+          <div className="mb-1 h-7 w-56 border-b-2 border-me-main text-center">
             {isLoading ? <LoadingText /> : user?.info.nickname}
           </div>
         </div>
@@ -39,20 +39,20 @@ export default function Profile() {
         {user?.info.phone && (
           <div className="mt-1 flex items-center text-xl font-bold">
             <IoMdPhonePortrait className="mr-2" />
-            <div className="h-7 w-56 text-center">
+            <div className="mb-1 h-7 w-56 border-b-2 border-me-main text-center">
               {isLoading ? <LoadingText /> : user?.info.phone}
             </div>
           </div>
         )}
         <div className="mt-1 flex items-center text-xl font-bold">
           <LuMail className="mr-2" />
-          <div className="h-7 w-56 text-center">
+          <div className="mb-1 h-7 w-56 border-b-2 border-me-main text-center">
             {isLoading ? <LoadingText /> : user?.info.email}
           </div>
         </div>
         <div className="mt-1 flex items-center text-xl font-bold">
           <FiLink className="mr-2" />
-          <div className="h-7 w-56 text-center">
+          <div className="mb-1 h-7 w-56 border-b-2 border-me-main text-center">
             {isLoading ? <LoadingText /> : `its-me/${user?.info.personalUrl}`}
           </div>
         </div>
