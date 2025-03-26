@@ -10,18 +10,19 @@ export interface IAuth {
 //1
 export interface IUser {
   nickname: string;
-  email?: string;
-  image?: string;
-  phone?: string;
-  personalUrl?: string;
-  comment?: string;
+  email: string;
+  image: string | null;
+  phone: string | null;
+  personalUrl: string | null;
+  comment: string | null;
+  isPremium: boolean;
   links: ILink[];
 }
 
 //2
 
 export interface ILink {
-  name: string;
+  linkName: string;
   url: string;
-  effect?: string;
+  effect: string | null;
 }

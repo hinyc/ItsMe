@@ -15,7 +15,6 @@ export async function GET() {
         sub: session?.user?.id
       },
       select: {
-        id: true,
         nickname: true,
         email: true,
         image: true,
@@ -50,7 +49,7 @@ export async function GET() {
       //session이 있으면 info에 추가 정보를 넣어준다
     }
 
-    return new Response(JSON.stringify(userInfo as IUser), {
+    return new Response(JSON.stringify(userInfo satisfies IUser), {
       headers: {
         'Content-Type': 'application/json'
       }

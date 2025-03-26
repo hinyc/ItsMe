@@ -129,7 +129,7 @@ export async function PUT(request: NextRequest) {
             await tx.userLink.createMany({
               data: payload.links.map((link) => ({
                 userId: userInfo.id,
-                linkName: link.name,
+                linkName: link.linkName,
                 url: link.url,
                 effect: link.effect
               }))
