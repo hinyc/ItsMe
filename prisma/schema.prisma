@@ -54,18 +54,13 @@ enum AuthProvider {
 model UserLink {
   id       Int      @id @default(autoincrement())
   userId   Int
-  linkType LinkType
   linkName String
   url      String
 
   user     User     @relation(fields: [userId], references: [id])
 }
 
-enum LinkType {
-  sns
-  website
-  etc
-}
+
 
 model UserPhoto {
   id        Int      @id @default(autoincrement())

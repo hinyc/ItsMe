@@ -1,20 +1,26 @@
 import { create } from 'zustand';
 
-interface IMeState {
-  edit: boolean;
-}
-
-interface ISetMeState {
-  setEdit: (edit: boolean) => void;
-}
+import { IMeState, ISetMeState } from './type';
 
 const initState: IMeState = {
-  edit: false
+  edit: false,
+  nickname: '',
+  email: '',
+  image: '',
+  phone: '',
+  personalUrl: '',
+  links: []
 };
 
 const useMeStore = create<IMeState & ISetMeState>((set) => ({
   ...initState,
-  setEdit: (edit) => set({ edit })
+  setEdit: (edit) => set({ edit }),
+  setNickname: (nickname) => set({ nickname }),
+  setEmail: (email) => set({ email }),
+  setImage: (image) => set({ image }),
+  setPhone: (phone) => set({ phone }),
+  setPersonalUrl: (personalUrl) => set({ personalUrl }),
+  setLinks: (links) => set({ links })
 }));
 
 export default useMeStore;

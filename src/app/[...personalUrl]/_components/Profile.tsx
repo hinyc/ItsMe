@@ -2,17 +2,46 @@ import LoadingText from '@/common/components/LoadingText';
 import { profileImage } from '@/common/constant/profieImage';
 import userGlobalQuery from '@/query';
 import Image from 'next/image';
-import React from 'react';
+import React, { useEffect } from 'react';
 import { BiLabel } from 'react-icons/bi';
 import { FiLink } from 'react-icons/fi';
 import { IoMdPhonePortrait } from 'react-icons/io';
 import { LuMail } from 'react-icons/lu';
+import useMeStore from '../_store';
 
 export default function Profile() {
   const { data: user, isLoading: isLoadingUser, isFetching } = userGlobalQuery.useUser();
+  const {
+    edit,
+    nickname,
+    email,
+    image,
+    phone,
+    personalUrl,
+    links,
+    setEdit,
+    setNickname,
+    setEmail,
+    setPersonalUrl,
+    setPhone
+  } = useMeStore();
 
   const isLoading = isLoadingUser || isFetching;
 
+  useEffect(() => {
+    if (user) {
+      useMeStore.setState({
+        edit: false,
+        nickname: user.info.nickname,
+        email: user.info.email,
+        image: user.info.image,
+        phone: user.info.phone,
+        personalUrl: user.info.personalUrl,
+        links: user.links
+      });
+    }
+  }, [user]);
+  console.log(nickname);
   return (
     <div className="flex w-full flex-col items-center justify-center py-8">
       <div className="mb-6 flex h-[150px] w-[150px] items-center justify-center overflow-hidden rounded-lg shadow-md">
@@ -31,29 +60,61 @@ export default function Profile() {
       <div>
         <div className="flex h-7 items-center text-xl font-bold">
           <BiLabel className="mr-2" />
-          <div className="mb-1 h-7 w-56 border-b-2 border-me-main text-center">
-            {isLoading ? <LoadingText /> : user?.info.nickname}
+          <div className="mb-1 h-7 w-56">
+            {isLoading ? (
+              <LoadingText />
+            ) : (
+              <input
+                className="h-full w-full border-b-2 border-me-main text-center"
+                onChange={(e) => setNickname(e.target.value)}
+                value={nickname}
+              />
+            )}
           </div>
         </div>
 
         {user?.info.phone && (
           <div className="mt-1 flex items-center text-xl font-bold">
             <IoMdPhonePortrait className="mr-2" />
-            <div className="mb-1 h-7 w-56 border-b-2 border-me-main text-center">
-              {isLoading ? <LoadingText /> : user?.info.phone}
+            <div className="mb-1 h-7 w-56">
+              {isLoading ? (
+                <LoadingText />
+              ) : (
+                <input
+                  className="h-full w-full border-b-2 border-me-main text-center"
+                  onChange={(e) => setPhone(e.target.value)}
+                  value={phone}
+                />
+              )}
             </div>
           </div>
         )}
         <div className="mt-1 flex items-center text-xl font-bold">
           <LuMail className="mr-2" />
-          <div className="mb-1 h-7 w-56 border-b-2 border-me-main text-center">
-            {isLoading ? <LoadingText /> : user?.info.email}
+          <div className="mb-1 h-7 w-56">
+            {isLoading ? (
+              <LoadingText />
+            ) : (
+              <input
+                className="h-full w-full border-b-2 border-me-main text-center"
+                onChange={(e) => setEmail(e.target.value)}
+                value={email}
+              />
+            )}
           </div>
         </div>
         <div className="mt-1 flex items-center text-xl font-bold">
           <FiLink className="mr-2" />
-          <div className="mb-1 h-7 w-56 border-b-2 border-me-main text-center">
-            {isLoading ? <LoadingText /> : `its-me/${user?.info.personalUrl}`}
+          <div className="mb-1 h-7 w-56">
+            {isLoading ? (
+              <LoadingText />
+            ) : (
+              <input
+                className="h-full w-full border-b-2 border-me-main text-center"
+                onChange={(e) => setPersonalUrl(e.target.value.slice(1))}
+                value={'/' + personalUrl}
+              />
+            )}
           </div>
         </div>
       </div>

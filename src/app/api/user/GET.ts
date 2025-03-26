@@ -23,6 +23,11 @@ export async function GET() {
         sub: session?.user?.id
       }
     });
+    const userLink = await prisma.userLink.findMany({
+      where: {
+        userId: userInfo?.id
+      }
+    });
 
     //user 정보가 없을 때, 가입안된상태
     if (!userInfo) {
@@ -40,6 +45,13 @@ export async function GET() {
     info.email = userInfo.email?.toString();
     info.image = userInfo.image?.toString();
     info.personalUrl = userInfo.personalUrl?.toString();
+
+    userLink.forEach((link) => {
+      links.push({
+        name: link.linkName,
+        url: link.url
+      });
+    });
 
     if (session?.user.id) {
       //session이 있으면 info에 추가 정보를 넣어준다
