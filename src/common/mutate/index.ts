@@ -7,7 +7,7 @@ export const useUpdateUserMutation = () => {
 
   return useMutation({
     mutationFn: async (payload: UpdateUserPayload) => {
-      const response = await api.put('/api/user', payload);
+      const response = await api.put('/user', payload);
 
       if (!response.data) {
         throw new Error('사용자 정보 업데이트에 실패했습니다.');

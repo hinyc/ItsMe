@@ -6,18 +6,16 @@ export interface IAuth {
 }
 
 //1+2
-export interface IUser {
-  info: IUserInfo;
-  links: ILink[];
-}
 
 //1
-export interface IUserInfo {
+export interface IUser {
   nickname: string;
   email?: string;
   image?: string;
   phone?: string;
   personalUrl?: string;
+  comment?: string;
+  links: ILink[];
 }
 
 //2

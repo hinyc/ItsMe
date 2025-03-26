@@ -58,6 +58,7 @@ model UserLink {
   userId   Int
   linkName String
   url      String
+  effect   String?
 
   user     User     @relation(fields: [userId], references: [id])
 }

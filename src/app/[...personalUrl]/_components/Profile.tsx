@@ -32,11 +32,11 @@ export default function Profile() {
     if (user) {
       useMeStore.setState({
         edit: false,
-        nickname: user.info.nickname,
-        email: user.info.email,
-        image: user.info.image,
-        phone: user.info.phone,
-        personalUrl: user.info.personalUrl,
+        nickname: user.nickname,
+        email: user.email,
+        image: user.image,
+        phone: user.phone,
+        personalUrl: user.personalUrl,
         links: user.links
       });
     }
@@ -48,8 +48,7 @@ export default function Profile() {
           width={152}
           height={152}
           src={
-            user?.info.image ||
-            profileImage.find((image) => image.name === 'placeholder_outline')!.url
+            user?.image || profileImage.find((image) => image.name === 'placeholder_outline')!.url
           }
           alt="profile image"
           className="mb-2 h-[152px] w-[152px]"
@@ -72,7 +71,7 @@ export default function Profile() {
           </div>
         </div>
 
-        {user?.info.phone && (
+        {user?.phone && (
           <div className="mt-1 flex items-center text-xl font-bold">
             <IoMdPhonePortrait className="mr-2" />
             <div className="mb-1 h-7 w-56">

@@ -1,6 +1,6 @@
 import { auth } from '@/auth';
 import { prisma } from '@/lib/prisma';
-import { ILink, IUser, IUserInfo } from '@/types';
+import { IUser } from '@/types';
 
 export async function GET() {
   try {
@@ -8,24 +8,28 @@ export async function GET() {
 
     const session = await auth();
 
-    const info: IUserInfo = {
-      nickname: 'nickname'
-    };
-
-    const links: ILink[] = [];
-
-    const user: IUser = { info, links };
-
     //session에 로그인된 사용자 정보가 없을 때, 비정상
 
     const userInfo = await prisma.user.findFirst({
       where: {
         sub: session?.user?.id
-      }
-    });
-    const userLink = await prisma.userLink.findMany({
-      where: {
-        userId: userInfo?.id
+      },
+      select: {
+        id: true,
+        nickname: true,
+        email: true,
+        image: true,
+        personalUrl: true,
+        phone: true,
+        comment: true,
+        isPremium: true,
+        links: {
+          select: {
+            linkName: true,
+            url: true,
+            effect: true
+          }
+        }
       }
     });
 
@@ -41,25 +45,12 @@ export async function GET() {
     }
 
     //user 정보를 로드하고 특정 정보만 반환
-    info.nickname = userInfo.nickname?.toString();
-    info.email = userInfo.email?.toString();
-    info.image = userInfo.image?.toString();
-    info.personalUrl = userInfo.personalUrl?.toString();
-
-    console.log('userLink', userLink);
-
-    userLink.forEach((link) => {
-      links.push({
-        name: link.linkName,
-        url: link.url
-      });
-    });
 
     if (session?.user.id) {
       //session이 있으면 info에 추가 정보를 넣어준다
     }
 
-    return new Response(JSON.stringify(user), {
+    return new Response(JSON.stringify(userInfo as IUser), {
       headers: {
         'Content-Type': 'application/json'
       }

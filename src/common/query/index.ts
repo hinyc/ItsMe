@@ -1,12 +1,12 @@
 import { IAuth, IUser } from '@/types';
 import { useQuery } from '@tanstack/react-query';
-import axios from 'axios';
+import api from '../api';
 
 const useAuth = () => {
   return useQuery<IAuth>({
     queryKey: ['auth'],
     queryFn: async () => {
-      const response = await axios.get('/api/auth');
+      const response = await api.get('/auth');
       const data = response.data;
       return data;
     },
@@ -18,7 +18,7 @@ const useUser = () => {
   return useQuery<IUser>({
     queryKey: ['user'],
     queryFn: async () => {
-      const response = await axios.get('/api/user');
+      const response = await api.get('/user');
       const data = response.data;
       return data;
     },
