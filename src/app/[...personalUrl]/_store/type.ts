@@ -8,6 +8,7 @@ export interface IMeState {
   phone: string;
   personalUrl: string;
   links: ILink[];
+  comment: string;
 }
 
 export interface ISetMeState {
@@ -18,4 +19,5 @@ export interface ISetMeState {
   setPhone: (phone: string) => void;
   setPersonalUrl: (personalUrl: string) => void;
   setLinks: (links: ILink[]) => void;
+  setComment: (comment: string) => void;
 }

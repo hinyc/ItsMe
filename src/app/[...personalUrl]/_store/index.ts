@@ -9,7 +9,8 @@ const initState: IMeState = {
   image: '',
   phone: '',
   personalUrl: '',
-  links: []
+  links: [],
+  comment: ''
 };
 
 const useMeStore = create<IMeState & ISetMeState>((set) => ({
@@ -20,7 +21,8 @@ const useMeStore = create<IMeState & ISetMeState>((set) => ({
   setImage: (image) => set({ image }),
   setPhone: (phone) => set({ phone }),
   setPersonalUrl: (personalUrl) => set({ personalUrl }),
-  setLinks: (links) => set({ links })
+  setLinks: (links) => set({ links }),
+  setComment: (comment) => set({ comment })
 }));
 
 export default useMeStore;

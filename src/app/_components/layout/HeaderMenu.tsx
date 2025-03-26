@@ -1,6 +1,6 @@
 import { queryClient } from '@/app/Providers';
 import useGlobalStore from '@/index';
-import userGlobalQuery from '@/query';
+import userGlobalQuery from '@/common/query';
 import { signOut } from 'next-auth/react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';

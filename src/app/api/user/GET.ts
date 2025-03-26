@@ -46,6 +46,8 @@ export async function GET() {
     info.image = userInfo.image?.toString();
     info.personalUrl = userInfo.personalUrl?.toString();
 
+    console.log('userLink', userLink);
+
     userLink.forEach((link) => {
       links.push({
         name: link.linkName,

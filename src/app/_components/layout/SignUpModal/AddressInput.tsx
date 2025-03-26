@@ -1,7 +1,7 @@
 import React from 'react';
 import useSignUpModalStore from './store';
 import api from '@/common/api';
-import userGlobalQuery from '@/query';
+import userGlobalQuery from '@/common/query';
 import useGlobalStore from '@/index';
 import { useRouter } from 'next/navigation';
 import { IUser } from '@/types';

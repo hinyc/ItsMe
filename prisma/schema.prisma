@@ -22,6 +22,8 @@ model User {
   nickname      String   @unique
   email         String   @unique
   image         String?
+  phone         String?
+  comment       String?
   personalUrl   String?  @unique
   isPremium     Boolean  @default(false)
   createdAt     DateTime @default(now())

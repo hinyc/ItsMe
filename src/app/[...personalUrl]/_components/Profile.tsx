@@ -1,6 +1,6 @@
 import LoadingText from '@/common/components/LoadingText';
 import { profileImage } from '@/common/constant/profieImage';
-import userGlobalQuery from '@/query';
+import userGlobalQuery from '@/common/query';
 import Image from 'next/image';
 import React, { useEffect } from 'react';
 import { BiLabel } from 'react-icons/bi';
@@ -41,7 +41,6 @@ export default function Profile() {
       });
     }
   }, [user]);
-  console.log(nickname);
   return (
     <div className="flex w-full flex-col items-center justify-center py-8">
       <div className="mb-6 flex h-[150px] w-[150px] items-center justify-center overflow-hidden rounded-lg shadow-md">

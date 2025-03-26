@@ -1,6 +1,6 @@
 'use client';
 import { useEffect } from 'react';
-import userGlobalQuery from '@/query';
+import userGlobalQuery from '@/common/query';
 import { useRouter } from 'next/navigation';
 import useGlobalStore from '@/index';
 

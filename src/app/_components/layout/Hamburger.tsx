@@ -2,7 +2,7 @@ import useGlobalStore from '@/index';
 import { FaBars, FaRegCircleUser } from 'react-icons/fa6';
 import React from 'react';
 import { signIn } from 'next-auth/react';
-import userGlobalQuery from '@/query';
+import userGlobalQuery from '@/common/query';
 
 export default function Hamburger() {
   const auth = userGlobalQuery.useAuth();

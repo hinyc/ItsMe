@@ -21,18 +21,6 @@ export interface IUserInfo {
 }
 
 //2
-export type TypeLinkName =
-  | 'instagram'
-  | 'facebook'
-  | 'x'
-  | 'linkedin'
-  | 'github'
-  | 'tiktok'
-  | 'youtube'
-  | 'website'
-  | 'blog'
-  | 'wechat'
-  | 'thread';
 
 export interface ILink {
   name: string;
