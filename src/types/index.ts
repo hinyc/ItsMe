@@ -21,8 +21,19 @@ export interface IUser {
 
 //2
 
+export type TypeIcon =
+  | 'instagram'
+  | 'facebook'
+  | 'x'
+  | 'linkedin'
+  | 'github'
+  | 'blog'
+  | 'wechat'
+  | 'tiktok'
+  | 'thread';
 export interface ILink {
-  linkName: string;
+  icon: TypeIcon;
+  name: string;
   url: string;
-  effect: string | null;
+  effect?: string;
 }

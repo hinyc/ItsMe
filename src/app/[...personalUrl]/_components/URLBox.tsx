@@ -2,14 +2,29 @@ import React from 'react';
 import { IconType } from 'react-icons';
 import useMeStore from '../_store';
 import { PiLinkSimple } from 'react-icons/pi';
+import { TypeIcon } from '@/types';
+import LinkIcon from './LinkICon';
 
 interface URLBoxProps {
   name: string;
   url: string;
-  onChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  icon: IconType;
+  onChangeUrl: (value: string) => void;
+  onChangeEffect: (value: string) => void;
+  onChangeName: (value: string) => void;
+  onChangeIcon: (value: string) => void;
+  icon: TypeIcon;
+  effect?: string;
 }
-export default function URLBox({ name, url, onChange, icon: Icon }: URLBoxProps) {
+export default function URLBox({
+  name,
+  url,
+  onChangeUrl,
+  onChangeEffect,
+  onChangeName,
+  icon,
+  effect
+}: URLBoxProps) {
+  //effect 미사용중
   const { edit } = useMeStore();
   const openUrl = () => {
     window.open(url, '_blank');
@@ -25,7 +40,7 @@ export default function URLBox({ name, url, onChange, icon: Icon }: URLBoxProps)
             rel="noopener noreferrer"
           />
         )}
-        <Icon className="mr-1 h-5 w-5" />
+        <LinkIcon iconType={icon} />
         <input
           className={`font-semibold capitalize outline-none focus:border-me-highlight focus:outline-none disabled:bg-transparent ${edit ? 'mb-1 w-[120px] border-b-2 border-me-main transition-all' : 'max-w-[100px]'}`}
           disabled={!edit}
@@ -38,7 +53,7 @@ export default function URLBox({ name, url, onChange, icon: Icon }: URLBoxProps)
           }}
           onChange={(e) => {
             if (edit) {
-              onChange(e);
+              onChangeName(e.target.value);
             }
           }}
         />
@@ -50,8 +65,16 @@ export default function URLBox({ name, url, onChange, icon: Icon }: URLBoxProps)
             className="w-[calc(100%-40px)] border-b-2 border-me-main px-1 outline-none transition-all focus:border-me-highlight focus:outline-none"
             type="text"
             value={url}
-            onChange={onChange}
+            onChange={(e) => onChangeUrl(e.target.value)}
           />
+          {effect && (
+            <input
+              className="w-[calc(100%-40px)] border-b-2 border-me-main px-1 outline-none transition-all focus:border-me-highlight focus:outline-none"
+              type="text"
+              value={effect}
+              onChange={(e) => onChangeEffect(e.target.value)}
+            />
+          )}
         </div>
       )}
     </div>
