@@ -10,7 +10,7 @@ const initState: IMeState = {
   image: '',
   phone: '',
   personalUrl: '',
-  links: defaultLinks,
+  links: [],
   comment: ''
 };
 

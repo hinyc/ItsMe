@@ -5,10 +5,7 @@ import URLBox from './URLBox';
 import useMeStore from '../_store';
 import { ILink } from '@/types';
 
-//sns - instagram, facebook, twitter, linkedin, github, blog, wechat, tictok, thread etc.
-
 export default function Links() {
-  // const [links, setLinks] = useState<ILink[]>(defaultLinks);
   const { edit, links, setLinks } = useMeStore();
 
   const handleLinkChange = (index: number, field: keyof ILink, value: string) => {
@@ -16,6 +13,8 @@ export default function Links() {
     newLinks[index] = { ...newLinks[index], [field]: value };
     setLinks(newLinks);
   };
+
+  console.log(links);
   return (
     <div>
       <h1 className="logo mb-4">IT&apos;S LINKS</h1>

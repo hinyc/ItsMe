@@ -34,8 +34,8 @@ export default function Profile() {
         edit: false,
         nickname: user.nickname,
         email: user.email,
-        image: user.image,
-        phone: user.phone,
+        image: user.image ?? '',
+        phone: user.phone ?? '',
         personalUrl: user.personalUrl,
         links: user.links
       });
