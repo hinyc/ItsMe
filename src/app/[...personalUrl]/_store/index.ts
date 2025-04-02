@@ -1,6 +1,7 @@
 import { create } from 'zustand';
 
 import { IMeState, ISetMeState } from './type';
+import { defaultLinks } from './dummy';
 
 const initState: IMeState = {
   edit: false,
@@ -9,7 +10,7 @@ const initState: IMeState = {
   image: '',
   phone: '',
   personalUrl: '',
-  links: [],
+  links: defaultLinks,
   comment: ''
 };
 
