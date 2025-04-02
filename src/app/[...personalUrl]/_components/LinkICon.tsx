@@ -11,9 +11,9 @@ import {
   RiBloggerLine
 } from 'react-icons/ri';
 import { PiThreadsLogoLight } from 'react-icons/pi';
-import { TypeIcon } from '@/types';
+import { LinkIcon } from '@prisma/client';
 
-const iconMap: Map<TypeIcon, IconType> = new Map([
+const iconMap: Map<LinkIcon, IconType> = new Map([
   ['instagram', RiInstagramLine],
   ['facebook', RiFacebookBoxLine],
   ['x', RiTwitterXLine],
@@ -25,7 +25,7 @@ const iconMap: Map<TypeIcon, IconType> = new Map([
   ['thread', PiThreadsLogoLight]
 ]);
 
-export default function LinkIcon({ iconType }: { iconType: TypeIcon }) {
+export default function LinkIconComponent({ iconType }: { iconType: LinkIcon }) {
   const Icon = iconMap.get(iconType);
 
   if (!Icon) return null;

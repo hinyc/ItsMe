@@ -2,8 +2,8 @@ import React from 'react';
 import { IconType } from 'react-icons';
 import useMeStore from '../_store';
 import { PiLinkSimple } from 'react-icons/pi';
-import { TypeIcon } from '@/types';
-import LinkIcon from './LinkICon';
+import { LinkIcon } from '@prisma/client';
+import LinkIconComponent from './LinkICon';
 
 interface URLBoxProps {
   name: string;
@@ -12,8 +12,8 @@ interface URLBoxProps {
   onChangeEffect: (value: string) => void;
   onChangeName: (value: string) => void;
   onChangeIcon: (value: string) => void;
-  icon: TypeIcon;
-  effect?: string;
+  icon: LinkIcon;
+  effect: string | null;
 }
 export default function URLBox({
   name,
@@ -40,7 +40,7 @@ export default function URLBox({
             rel="noopener noreferrer"
           />
         )}
-        <LinkIcon iconType={icon} />
+        <LinkIconComponent iconType={icon} />
         <input
           className={`font-semibold capitalize outline-none focus:border-me-highlight focus:outline-none disabled:bg-transparent ${edit ? 'mb-1 w-[120px] border-b-2 border-me-main transition-all' : 'max-w-[100px]'}`}
           disabled={!edit}

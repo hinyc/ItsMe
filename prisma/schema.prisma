@@ -53,11 +53,24 @@ enum AuthProvider {
   github
 }
 
+enum LinkIcon {
+  instagram
+  facebook
+  x
+  linkedin
+  github
+  blog
+  wechat
+  tiktok
+  thread
+}
+
 model UserLink {
   id       Int      @id @default(autoincrement())
   userId   Int
   linkName String
   url      String
+  icon     LinkIcon
   effect   String?
 
   user     User     @relation(fields: [userId], references: [id])

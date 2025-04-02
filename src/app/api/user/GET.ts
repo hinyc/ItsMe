@@ -25,6 +25,7 @@ export async function GET() {
         links: {
           select: {
             linkName: true,
+            icon: true,
             url: true,
             effect: true
           }

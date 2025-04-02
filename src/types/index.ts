@@ -1,3 +1,4 @@
+import { LinkIcon } from '@prisma/client';
 export interface IAuth {
   nickname?: string;
   email?: string;
@@ -20,20 +21,9 @@ export interface IUser {
 }
 
 //2
-
-export type TypeIcon =
-  | 'instagram'
-  | 'facebook'
-  | 'x'
-  | 'linkedin'
-  | 'github'
-  | 'blog'
-  | 'wechat'
-  | 'tiktok'
-  | 'thread';
 export interface ILink {
-  icon: TypeIcon;
-  name: string;
+  icon: LinkIcon;
+  linkName: string;
   url: string;
-  effect?: string;
+  effect: string | null;
 }

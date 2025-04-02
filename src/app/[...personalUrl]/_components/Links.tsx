@@ -27,12 +27,12 @@ export default function Links() {
             <URLBox
               key={index}
               icon={link.icon}
-              name={link.name}
+              name={link.linkName}
               url={link.url}
               effect={link.effect}
               onChangeUrl={(value) => handleLinkChange(index, 'url', value)}
               onChangeEffect={(value) => handleLinkChange(index, 'effect', value)}
-              onChangeName={(value) => handleLinkChange(index, 'name', value)}
+              onChangeName={(value) => handleLinkChange(index, 'linkName', value)}
               onChangeIcon={(value) => handleLinkChange(index, 'icon', value)}
             />
           );
@@ -48,47 +48,56 @@ export default function Links() {
 const defaultLinks: ILink[] = [
   {
     icon: 'instagram',
-    name: 'instagram',
-    url: 'https://instagram.com/inyeolhong'
+    linkName: 'instagram',
+    url: 'https://instagram.com/inyeolhong',
+    effect: null
   },
   {
     icon: 'facebook',
-    name: 'facebook',
-    url: 'https://facebook.com'
+    linkName: 'facebook',
+    url: 'https://facebook.com',
+    effect: null
   },
   {
     icon: 'x',
-    name: 'x',
-    url: 'https://x.com/wooluluKKANG'
+    linkName: 'x',
+    url: 'https://x.com/wooluluKKANG',
+    effect: null
   },
   {
     icon: 'linkedin',
-    name: 'linkedin',
-    url: 'https://www.linkedin.com/in/honginyeol'
+    linkName: 'linkedin',
+    url: 'https://www.linkedin.com/in/honginyeol',
+    effect: null
   },
   {
     icon: 'github',
-    name: 'github',
-    url: 'https://github.com/hinyc'
+    linkName: 'github',
+    url: 'https://github.com/hinyc',
+    effect: null
   },
   {
     icon: 'blog',
-    name: 'blog',
-    url: 'https://blog.com'
+    linkName: 'blog',
+    url: 'https://blog.com',
+    effect: null
   },
   {
     icon: 'wechat',
-    name: 'wechat',
-    url: 'https://wechat.com'
+    linkName: 'wechat',
+    url: 'https://wechat.com',
+    effect: null
   },
   {
     icon: 'tiktok',
-    name: 'tiktok',
-    url: 'https://tiktok.com'
+    linkName: 'tiktok',
+    url: 'https://tiktok.com',
+    effect: null
   },
   {
     icon: 'thread',
-    name: 'thread',
-    url: 'https://threads.net/@inyeolhong'
+    linkName: 'thread',
+    url: 'https://threads.net/@inyeolhong',
+    effect: null
   }
 ];

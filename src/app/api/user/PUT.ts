@@ -131,6 +131,7 @@ export async function PUT(request: NextRequest) {
                 userId: userInfo.id,
                 linkName: link.linkName,
                 url: link.url,
+                icon: link.icon,
                 effect: link.effect
               }))
             });
