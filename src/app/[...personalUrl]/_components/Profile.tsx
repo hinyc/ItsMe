@@ -36,7 +36,7 @@ export default function Profile() {
         email: user.email,
         image: user.image ?? '',
         phone: user.phone ?? '',
-        personalUrl: user.personalUrl,
+        personalUrl: user.personalUrl ?? '',
         links: user.links
       });
     }

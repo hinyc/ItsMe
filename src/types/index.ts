@@ -14,7 +14,7 @@ export interface IUser {
   email: string;
   image: string | null;
   phone: string | null;
-  personalUrl: string;
+  personalUrl: string | null;
   comment: string | null;
   isPremium: boolean;
   links: ILink[];
