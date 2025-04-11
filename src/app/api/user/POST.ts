@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import { prisma } from '@/lib/prisma';
+import { createSupabaseClient } from '@/lib/supabase';
 import { NextRequest } from 'next/server';
 
 export interface IUserPayload {
@@ -44,9 +44,17 @@ export async function POST(request: NextRequest) {
     };
     console.log('payload', userInfoParams);
 
-    const user = await prisma.user.create({
-      data: userInfoParams
-    });
+    const supabase = await createSupabaseClient();
+
+    const { data: user, error } = await supabase
+      .from('User')
+      .insert([userInfoParams])
+      .select()
+      .single();
+
+    if (error) {
+      throw error;
+    }
 
     console.log('user', user);
 

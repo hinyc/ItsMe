@@ -1,3 +1,11 @@
 {
-  "cSpell.words": ["autoincrement", "dbgenerated", "kakao", "NEXTAUTH", "textshadow", "Xmark"]
+  "cSpell.words": [
+    "autoincrement",
+    "dbgenerated",
+    "kakao",
+    "NEXTAUTH",
+    "supabase",
+    "textshadow",
+    "Xmark"
+  ]
 }

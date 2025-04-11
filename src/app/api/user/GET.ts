@@ -1,41 +1,14 @@
 import { auth } from '@/auth';
-import { prisma } from '@/lib/prisma';
+import { createSupabaseClient } from '@/lib/supabase';
 import { IUser } from '@/types';
 
 export async function GET() {
   try {
-    //sub 확인
-
     const session = await auth();
+    console.log('Session:', session);
 
-    //session에 로그인된 사용자 정보가 없을 때, 비정상
-
-    const userInfo = await prisma.user.findFirst({
-      where: {
-        sub: session?.user?.id
-      },
-      select: {
-        nickname: true,
-        email: true,
-        image: true,
-        personalUrl: true,
-        phone: true,
-        comment: true,
-        isPremium: true,
-        links: {
-          select: {
-            linkName: true,
-            icon: true,
-            url: true,
-            effect: true
-          }
-        }
-      }
-    });
-
-    //user 정보가 없을 때, 가입안된상태
-    if (!userInfo) {
-      //nickname 미등록 계정
+    if (!session?.user?.id) {
+      console.log('No session or user ID');
       return new Response('Unauthorized', {
         headers: {
           'Content-Type': 'application/json'
@@ -44,18 +17,118 @@ export async function GET() {
       });
     }
 
-    //user 정보를 로드하고 특정 정보만 반환
+    const supabase = await createSupabaseClient();
 
-    if (session?.user.id) {
-      //session이 있으면 info에 추가 정보를 넣어준다
+    // 사용자 기본 정보 조회
+    const { data: userInfo, error: userError } = await supabase
+      .from('User')
+      .select(
+        `
+        id,
+        sub,
+        name,
+        nickname,
+        email,
+        image,
+        personalUrl,
+        phone,
+        comment,
+        isPremium,
+        createdAt,
+        updatedAt
+      `
+      )
+      .eq('sub', session.user.id)
+      .maybeSingle();
+
+    if (userError) {
+      console.error('User fetch error:', userError);
+      throw userError;
     }
 
-    return new Response(JSON.stringify(userInfo satisfies IUser), {
+    if (!userInfo) {
+      console.log('No user found for sub:', session.user.id);
+      return new Response(
+        JSON.stringify({
+          nickname: '',
+          email: '',
+          image: '',
+          personalUrl: '',
+          phone: '',
+          comment: '',
+          isPremium: false,
+          links: []
+        } satisfies IUser),
+        {
+          headers: {
+            'Content-Type': 'application/json'
+          }
+        }
+      );
+    }
+
+    // 사용자 링크 정보 조회
+    const { data: links, error: linksError } = await supabase
+      .from('UserLink')
+      .select('*')
+      .eq('userId', userInfo.id);
+
+    if (linksError) {
+      console.error('Links fetch error:', linksError);
+      throw linksError;
+    }
+
+    // 사용자 사진 정보 조회
+    const { data: photos, error: photosError } = await supabase
+      .from('UserPhoto')
+      .select('*')
+      .eq('userId', userInfo.id);
+
+    if (photosError) {
+      console.error('Photos fetch error:', photosError);
+      throw photosError;
+    }
+
+    // 구독 정보 조회
+    const { data: subscription, error: subscriptionError } = await supabase
+      .from('Subscription')
+      .select('*')
+      .eq('userId', userInfo.id)
+      .maybeSingle();
+
+    if (subscriptionError) {
+      console.error('Subscription fetch error:', subscriptionError);
+      throw subscriptionError;
+    }
+
+    // 인증 정보 조회
+    const { data: authInfo, error: authError } = await supabase
+      .from('UserAuth')
+      .select('*')
+      .eq('userId', userInfo.id)
+      .maybeSingle();
+
+    if (authError) {
+      console.error('Auth info fetch error:', authError);
+      throw authError;
+    }
+
+    // 모든 정보를 하나의 객체로 병합
+    const responseData = {
+      ...userInfo,
+      links: links || [],
+      photos: photos || [],
+      subscription: subscription || null,
+      auth: authInfo || null
+    };
+
+    return new Response(JSON.stringify(responseData satisfies IUser), {
       headers: {
         'Content-Type': 'application/json'
       }
     });
   } catch (error) {
+    console.error('Error in GET handler:', error);
     return new Response(JSON.stringify(error), {
       headers: {
         'Content-Type': 'application/json'

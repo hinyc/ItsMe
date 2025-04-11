@@ -1,5 +1,5 @@
 import { auth } from '@/auth';
-import { prisma } from '@/lib/prisma';
+import { createSupabaseClient } from '@/lib/supabase';
 import { ILink } from '@/types';
 import { NextRequest } from 'next/server';
 
@@ -17,7 +17,7 @@ export async function PUT(request: NextRequest) {
   try {
     const session = await auth();
 
-    if (!session) {
+    if (!session?.user?.id) {
       return new Response(JSON.stringify({ error: '인증 정보가 없습니다.' }), {
         headers: {
           'Content-Type': 'application/json'
@@ -37,12 +37,19 @@ export async function PUT(request: NextRequest) {
       });
     }
 
+    const supabase = await createSupabaseClient();
+
     // 사용자 정보 조회
-    const userInfo = await prisma.user.findFirst({
-      where: {
-        sub: session.user.id
-      }
-    });
+    const { data: userInfo, error: userError } = await supabase
+      .from('User')
+      .select('*')
+      .eq('sub', session.user.id)
+      .maybeSingle();
+
+    if (userError) {
+      console.error('User fetch error:', userError);
+      throw userError;
+    }
 
     if (!userInfo) {
       return new Response(JSON.stringify({ error: '사용자를 찾을 수 없습니다.' }), {
@@ -53,109 +60,162 @@ export async function PUT(request: NextRequest) {
       });
     }
 
-    try {
-      // 중복 체크
-      if (payload.nickname && payload.nickname !== userInfo.nickname) {
-        const existingNickname = await prisma.user.findUnique({
-          where: { nickname: payload.nickname }
+    // 중복 체크
+    if (payload.nickname && payload.nickname !== userInfo.nickname) {
+      const { data: existingNickname } = await supabase
+        .from('User')
+        .select('nickname')
+        .eq('nickname', payload.nickname)
+        .maybeSingle();
+
+      if (existingNickname) {
+        return new Response(JSON.stringify({ error: '이미 사용 중인 닉네임입니다.' }), {
+          headers: { 'Content-Type': 'application/json' },
+          status: 400
         });
-        if (existingNickname) {
-          return new Response(JSON.stringify({ error: '이미 사용 중인 닉네임입니다.' }), {
-            headers: { 'Content-Type': 'application/json' },
-            status: 400
-          });
-        }
       }
-
-      if (payload.personalUrl && payload.personalUrl !== userInfo.personalUrl) {
-        const existingUrl = await prisma.user.findUnique({
-          where: { personalUrl: payload.personalUrl }
-        });
-        if (existingUrl) {
-          return new Response(JSON.stringify({ error: '이미 사용 중인 URL입니다.' }), {
-            headers: { 'Content-Type': 'application/json' },
-            status: 400
-          });
-        }
-      }
-
-      if (payload.email && payload.email !== userInfo.email) {
-        const existingEmail = await prisma.user.findUnique({
-          where: { email: payload.email }
-        });
-        if (existingEmail) {
-          return new Response(JSON.stringify({ error: '이미 사용 중인 이메일입니다.' }), {
-            headers: { 'Content-Type': 'application/json' },
-            status: 400
-          });
-        }
-      }
-
-      // 트랜잭션으로 사용자 정보와 링크 정보 동시 수정
-      const result = await prisma.$transaction(async (tx) => {
-        // 사용자 정보 업데이트 - 변경된 필드만
-        const updateData = {
-          ...(payload.nickname && { nickname: payload.nickname }),
-          ...(payload.personalUrl && { personalUrl: payload.personalUrl }),
-          ...(payload.image && { image: payload.image }),
-          ...(payload.email && { email: payload.email }),
-          ...(payload.phone && { phone: payload.phone }),
-          ...(payload.comment !== undefined && { comment: payload.comment })
-        };
-
-        const updatedUser = await tx.user.update({
-          where: { id: userInfo.id },
-          data: updateData,
-          select: {
-            id: true,
-            nickname: true,
-            personalUrl: true,
-            image: true,
-            email: true,
-            phone: true,
-            comment: true,
-            links: true
-          }
-        });
-
-        // 기존 링크 삭제
-        if (payload.links !== undefined) {
-          await tx.userLink.deleteMany({
-            where: { userId: userInfo.id }
-          });
-
-          // 새로운 링크 추가
-          if (payload.links.length > 0) {
-            await tx.userLink.createMany({
-              data: payload.links.map((link) => ({
-                userId: userInfo.id,
-                linkName: link.linkName,
-                url: link.url,
-                icon: link.icon,
-                effect: link.effect
-              }))
-            });
-          }
-        }
-
-        return updatedUser;
-      });
-
-      return new Response(JSON.stringify(result), {
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        status: 200
-      });
-    } catch (txError) {
-      console.log('Transaction error:', txError);
-      return new Response(JSON.stringify({ error: '사용자 정보 수정 중 오류가 발생했습니다.' }), {
-        headers: { 'Content-Type': 'application/json' },
-        status: 500
-      });
     }
+
+    if (payload.personalUrl && payload.personalUrl !== userInfo.personalUrl) {
+      const { data: existingUrl } = await supabase
+        .from('User')
+        .select('personalUrl')
+        .eq('personalUrl', payload.personalUrl)
+        .maybeSingle();
+
+      if (existingUrl) {
+        return new Response(JSON.stringify({ error: '이미 사용 중인 URL입니다.' }), {
+          headers: { 'Content-Type': 'application/json' },
+          status: 400
+        });
+      }
+    }
+
+    if (payload.email && payload.email !== userInfo.email) {
+      const { data: existingEmail } = await supabase
+        .from('User')
+        .select('email')
+        .eq('email', payload.email)
+        .maybeSingle();
+
+      if (existingEmail) {
+        return new Response(JSON.stringify({ error: '이미 사용 중인 이메일입니다.' }), {
+          headers: { 'Content-Type': 'application/json' },
+          status: 400
+        });
+      }
+    }
+
+    // 사용자 정보 업데이트
+    const updateData = {
+      ...(payload.nickname && { nickname: payload.nickname }),
+      ...(payload.personalUrl && { personalUrl: payload.personalUrl }),
+      ...(payload.image && { image: payload.image }),
+      ...(payload.email && { email: payload.email }),
+      ...(payload.phone && { phone: payload.phone }),
+      ...(payload.comment !== undefined && { comment: payload.comment })
+    };
+
+    const { data: updatedUser, error: updateError } = await supabase
+      .from('User')
+      .update(updateData)
+      .eq('sub', session.user.id)
+      .select(
+        `
+        id,
+        sub,
+        nickname,
+        email,
+        image,
+        personalUrl,
+        phone,
+        comment,
+        isPremium,
+        links:UserLink (
+          linkName,
+          icon,
+          url,
+          effect
+        )
+      `
+      )
+      .maybeSingle();
+
+    if (updateError) {
+      console.error('User update error:', updateError);
+      throw updateError;
+    }
+
+    // 링크 업데이트
+    if (payload.links !== undefined) {
+      // 기존 링크 삭제
+      const { error: deleteError } = await supabase
+        .from('UserLink')
+        .delete()
+        .eq('userId', userInfo.id);
+
+      if (deleteError) {
+        console.error('Link delete error:', deleteError);
+        throw deleteError;
+      }
+
+      // 새로운 링크 추가
+      if (payload.links.length > 0) {
+        const { error: insertError } = await supabase.from('UserLink').insert(
+          payload.links.map((link) => ({
+            userId: userInfo.id,
+            linkName: link.linkName,
+            url: link.url,
+            icon: link.icon,
+            effect: link.effect
+          }))
+        );
+
+        if (insertError) {
+          console.error('Link insert error:', insertError);
+          throw insertError;
+        }
+      }
+    }
+
+    // 최종 업데이트된 사용자 정보 조회
+    const { data: finalUser, error: finalError } = await supabase
+      .from('User')
+      .select(
+        `
+        id,
+        sub,
+        nickname,
+        email,
+        image,
+        personalUrl,
+        phone,
+        comment,
+        isPremium,
+        links:UserLink (
+          linkName,
+          icon,
+          url,
+          effect
+        )
+      `
+      )
+      .eq('sub', session.user.id)
+      .maybeSingle();
+
+    if (finalError) {
+      console.error('Final fetch error:', finalError);
+      throw finalError;
+    }
+
+    return new Response(JSON.stringify(finalUser), {
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      status: 200
+    });
   } catch (error) {
-    console.log('Error updating user:', error);
+    console.error('Error in PUT handler:', error);
     return new Response(JSON.stringify({ error: '사용자 정보 수정 중 오류가 발생했습니다.' }), {
       headers: {
         'Content-Type': 'application/json'
