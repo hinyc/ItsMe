@@ -11,7 +11,7 @@ import {
   RiBloggerLine
 } from 'react-icons/ri';
 import { PiThreadsLogoLight } from 'react-icons/pi';
-import { LinkIcon } from '@prisma/client';
+import { LinkIcon } from '@prisma/client/edge';
 
 const iconMap: Map<LinkIcon, IconType> = new Map([
   ['instagram', RiInstagramLine],

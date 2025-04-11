@@ -11,20 +11,8 @@ import useMeStore from '../_store';
 
 export default function Profile() {
   const { data: user, isLoading: isLoadingUser, isFetching } = userGlobalQuery.useUser();
-  const {
-    edit,
-    nickname,
-    email,
-    image,
-    phone,
-    personalUrl,
-    links,
-    setEdit,
-    setNickname,
-    setEmail,
-    setPersonalUrl,
-    setPhone
-  } = useMeStore();
+  const { nickname, email, phone, personalUrl, setNickname, setEmail, setPersonalUrl, setPhone } =
+    useMeStore();
 
   const isLoading = isLoadingUser || isFetching;
 

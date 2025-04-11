@@ -8,10 +8,8 @@ export default function RedirectToMe() {
   const auth = userGlobalQuery.useAuth();
   const router = useRouter();
 
-  console.log(auth.data);
   useEffect(() => {
     if (!auth.isLoading && auth.data && !auth.data.email) {
-      console.log('show modal', !auth.data);
       useGlobalStore.getState().setShowSignUpModal(true);
     }
 

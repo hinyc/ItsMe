@@ -1,8 +1,7 @@
 import React from 'react';
-import { IconType } from 'react-icons';
 import useMeStore from '../_store';
 import { PiLinkSimple } from 'react-icons/pi';
-import { LinkIcon } from '@prisma/client';
+import { LinkIcon } from '@prisma/client/edge';
 import LinkIconComponent from './LinkICon';
 
 interface URLBoxProps {
@@ -46,7 +45,6 @@ export default function URLBox({
           disabled={!edit}
           value={name}
           onClick={() => {
-            console.log('click');
             if (!edit) {
               openUrl();
             }

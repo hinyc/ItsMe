@@ -31,8 +31,6 @@ export default function AddressInput() {
     if (!address) return;
     if (!nickname) return;
 
-    console.log(nickname, address);
-
     //가입요청
     //성공시 user 정보 refetch
     api
@@ -41,10 +39,10 @@ export default function AddressInput() {
         personalUrl: address
       })
       .then((res) => {
-        const { info } = res.data as unknown as IUser;
+        const { personalUrl } = res.data as unknown as IUser;
         refetch();
         useGlobalStore.getState().setShowSignUpModal(false);
-        router.push(`${info.personalUrl}`);
+        router.push(`${personalUrl}`);
       })
       .catch((err) => {
         console.log(err);

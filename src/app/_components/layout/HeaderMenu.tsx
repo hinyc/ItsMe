@@ -71,7 +71,7 @@ export default function HeaderMenu() {
           <button
             className="logo"
             onClick={() => {
-              route.push(user?.info.personalUrl ?? '/');
+              route.push(user?.personalUrl ?? '/');
               setShowMainNav(false);
             }}
           >

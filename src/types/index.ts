@@ -1,4 +1,4 @@
-import { LinkIcon } from '@prisma/client';
+import { LinkIcon } from '@prisma/client/edge';
 export interface IAuth {
   nickname?: string;
   email?: string;

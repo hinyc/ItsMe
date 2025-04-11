@@ -1,6 +1,6 @@
 'use client';
-import React, { useState } from 'react';
-import { RiInstagramLine } from 'react-icons/ri';
+import React from 'react';
+
 import URLBox from './URLBox';
 import useMeStore from '../_store';
 import { ILink } from '@/types';
@@ -14,7 +14,6 @@ export default function Links() {
     setLinks(newLinks);
   };
 
-  console.log(links);
   return (
     <div>
       <h1 className="logo mb-4">IT&apos;S LINKS</h1>
