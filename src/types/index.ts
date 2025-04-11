@@ -1,4 +1,5 @@
-import { LinkIcon } from '@prisma/client/edge';
+import { User, UserLink, UserPhoto, Subscription } from '@prisma/client/edge';
+
 export interface IAuth {
   nickname?: string;
   email?: string;
@@ -9,21 +10,13 @@ export interface IAuth {
 //1+2
 
 //1
-export interface IUser {
-  nickname: string;
-  email: string;
-  image: string | null;
-  phone: string | null;
-  personalUrl: string | null;
-  comment: string | null;
-  isPremium: boolean;
-  links: ILink[];
-}
+export type IUser = User & {
+  links: UserLink[];
+  photos?: UserPhoto[];
+  subscription?: Subscription | null;
+};
 
 //2
-export interface ILink {
-  icon: LinkIcon;
-  linkName: string;
-  url: string;
-  effect: string | null;
-}
+export type ILink = UserLink;
+export type IPhoto = UserPhoto;
+export type ISubscription = Subscription;

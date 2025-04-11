@@ -4,6 +4,7 @@ import React from 'react';
 import URLBox from './URLBox';
 import useMeStore from '../_store';
 import { ILink } from '@/types';
+import { LinkIcon } from '@prisma/client/edge';
 
 export default function Links() {
   const { edit, links, setLinks } = useMeStore();
@@ -24,10 +25,10 @@ export default function Links() {
           return (
             <URLBox
               key={index}
-              icon={link.icon}
+              icon={link.icon as LinkIcon}
               name={link.linkName}
               url={link.url}
-              effect={link.effect}
+              effect={link.effect ?? null}
               onChangeUrl={(value) => handleLinkChange(index, 'url', value)}
               onChangeEffect={(value) => handleLinkChange(index, 'effect', value)}
               onChangeName={(value) => handleLinkChange(index, 'linkName', value)}

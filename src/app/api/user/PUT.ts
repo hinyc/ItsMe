@@ -116,31 +116,12 @@ export async function PUT(request: NextRequest) {
       ...(payload.comment !== undefined && { comment: payload.comment })
     };
 
-    const { data: updatedUser, error: updateError } = await supabase
+    const { error: updateError } = await supabase
       .from('User')
       .update(updateData)
       .eq('sub', session.user.id)
-      .select(
-        `
-        id,
-        sub,
-        nickname,
-        email,
-        image,
-        personalUrl,
-        phone,
-        comment,
-        isPremium,
-        links:UserLink (
-          id,
-          linkName,
-          icon,
-          url,
-          effect
-        )
-      `
-      )
-      .maybeSingle();
+      .select()
+      .single();
 
     if (updateError) {
       console.error('User update error:', updateError);

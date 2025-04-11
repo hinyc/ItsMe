@@ -21,8 +21,6 @@ export async function GET() {
 
     const supabase = await createSupabaseClient();
 
-    // 먼저 User 테이블의 모든 데이터를 확인
-
     // 사용자 기본 정보만 먼저 조회
     const { data: userInfo, error: userError } = await supabase
       .from('User')
@@ -41,6 +39,9 @@ export async function GET() {
       console.log('No user found for sub:', session.user.id);
       return new Response(
         JSON.stringify({
+          id: 0,
+          sub: '',
+          name: '',
           nickname: '',
           email: '',
           image: '',
@@ -48,7 +49,17 @@ export async function GET() {
           phone: '',
           comment: '',
           isPremium: false,
-          links: []
+          links: [],
+          photos: [],
+          // subscription: {
+          //   userId: 0,
+          //   planType: 'free',
+          //   startDate: new Date(),
+          //   endDate: null,
+          //   status: 'active'
+          // },
+          createdAt: new Date(),
+          updatedAt: new Date()
         } satisfies IUser),
         {
           headers: {
@@ -58,26 +69,7 @@ export async function GET() {
       );
     }
 
-    // 관계된 데이터는 별도로 조회
-    const { data: links } = await supabase.from('UserLink').select('*').eq('userId', userInfo.id);
-
-    const { data: photos } = await supabase.from('UserPhoto').select('*').eq('userId', userInfo.id);
-
-    const { data: subscription } = await supabase
-      .from('Subscription')
-      .select('*')
-      .eq('userId', userInfo.id)
-      .maybeSingle();
-
-    // 모든 데이터를 하나의 객체로 병합
-    const responseData = {
-      ...userInfo,
-      links: links || [],
-      photos: photos || [],
-      subscription: subscription || null
-    };
-
-    return new Response(JSON.stringify(responseData satisfies IUser), {
+    return new Response(JSON.stringify(userInfo satisfies IUser), {
       headers: {
         'Content-Type': 'application/json'
       }
