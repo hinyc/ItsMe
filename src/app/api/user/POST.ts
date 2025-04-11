@@ -13,8 +13,11 @@ export interface IUserPayload {
 export async function POST(request: NextRequest) {
   try {
     const session = await auth();
+    console.log('Session:', session);
+    console.log('Session user:', session?.user);
 
     const payload = await request.json();
+    console.log('Payload:', payload);
 
     if (!payload) {
       return new Response(JSON.stringify({ error: 'No payload' }), {
@@ -25,7 +28,6 @@ export async function POST(request: NextRequest) {
       });
     }
 
-    //이미 등록된 유저인지 체크
     if (!session) {
       return new Response(JSON.stringify({ error: 'No session' }), {
         headers: {
@@ -42,25 +44,51 @@ export async function POST(request: NextRequest) {
       sub: session.user.id,
       ...payload
     };
-    console.log('payload', userInfoParams);
+
+    console.log('User info params:', userInfoParams);
 
     const supabase = await createSupabaseClient();
+    console.log('Supabase client created');
 
-    const { data: user, error } = await supabase
+    // 중복 체크
+    const { data: existingUser, error: checkError } = await supabase
       .from('User')
-      .insert([userInfoParams])
-      .select()
-      .single();
+      .select('id')
+      .eq('sub', session.user.id)
+      .maybeSingle();
 
-    if (error) {
-      throw error;
+    console.log('Existing user check:', { existingUser, checkError });
+
+    if (checkError) {
+      console.error('Check error:', checkError);
+      throw checkError;
     }
 
-    console.log('user', user);
+    if (existingUser) {
+      return new Response(JSON.stringify({ error: '이미 등록된 사용자입니다.' }), {
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        status: 400
+      });
+    }
+
+    // 사용자 생성
+    const { data: user, error: insertError } = await supabase
+      .from('User')
+      .insert([userInfoParams])
+      .select('*')
+      .single();
+
+    console.log('User creation result:', { user, error: insertError });
+
+    if (insertError) {
+      console.error('User creation error:', insertError);
+      throw insertError;
+    }
 
     if (!user) {
-      //등록실패
-      return new Response(JSON.stringify({ error: 'registration failed' }), {
+      return new Response(JSON.stringify({ error: '사용자 등록에 실패했습니다.' }), {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -74,11 +102,18 @@ export async function POST(request: NextRequest) {
       }
     });
   } catch (error) {
-    return new Response(JSON.stringify({ error: error }), {
-      status: 401,
-      headers: {
-        'Content-Type': 'application/json'
+    console.error('Error in POST handler:', error);
+    return new Response(
+      JSON.stringify({
+        error: '서버 오류가 발생했습니다.',
+        details: error instanceof Error ? error.message : 'Unknown error'
+      }),
+      {
+        status: 500,
+        headers: {
+          'Content-Type': 'application/json'
+        }
       }
-    });
+    );
   }
 }

@@ -5,16 +5,17 @@ import { useRouter } from 'next/navigation';
 import useGlobalStore from '@/index';
 
 export default function RedirectToMe() {
-  const auth = userGlobalQuery.useAuth();
+  const { data: auth, isLoading } = userGlobalQuery.useAuth();
   const router = useRouter();
 
+  console.log('auth', auth);
   useEffect(() => {
-    if (!auth.isLoading && auth.data && !auth.data.email) {
+    if (!isLoading && !auth?.email && !auth?.isAuthenticated) {
       useGlobalStore.getState().setShowSignUpModal(true);
     }
 
-    if (!auth.data?.personalUrl) return;
-    router.push(`/${auth.data.personalUrl}`);
-  }, [auth.data, auth.isLoading, router]);
+    if (!auth?.personalUrl) return;
+    router.push(`/${auth.personalUrl}`);
+  }, [auth, isLoading, router]);
   return null;
 }

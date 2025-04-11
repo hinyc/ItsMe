@@ -6,10 +6,12 @@ export async function GET() {
   try {
     const session = await auth();
     console.log('Session:', session);
+    console.log('Session user id type:', typeof session?.user?.id);
+    console.log('Session user id value:', session?.user?.id);
 
     if (!session?.user?.id) {
       console.log('No session or user ID');
-      return new Response('Unauthorized', {
+      return new Response(JSON.stringify({ error: 'Unauthorized', session }), {
         headers: {
           'Content-Type': 'application/json'
         },
@@ -19,27 +21,16 @@ export async function GET() {
 
     const supabase = await createSupabaseClient();
 
-    // 사용자 기본 정보 조회
+    // 먼저 User 테이블의 모든 데이터를 확인
+
+    // 사용자 기본 정보만 먼저 조회
     const { data: userInfo, error: userError } = await supabase
       .from('User')
-      .select(
-        `
-        id,
-        sub,
-        name,
-        nickname,
-        email,
-        image,
-        personalUrl,
-        phone,
-        comment,
-        isPremium,
-        createdAt,
-        updatedAt
-      `
-      )
+      .select('*, links:UserLink(*), photos:UserPhoto(*), subscription:Subscription(*)')
       .eq('sub', session.user.id)
       .maybeSingle();
+
+    console.log('User query result:', { userInfo, error: userError });
 
     if (userError) {
       console.error('User fetch error:', userError);
@@ -67,59 +58,23 @@ export async function GET() {
       );
     }
 
-    // 사용자 링크 정보 조회
-    const { data: links, error: linksError } = await supabase
-      .from('UserLink')
-      .select('*')
-      .eq('userId', userInfo.id);
+    // 관계된 데이터는 별도로 조회
+    const { data: links } = await supabase.from('UserLink').select('*').eq('userId', userInfo.id);
 
-    if (linksError) {
-      console.error('Links fetch error:', linksError);
-      throw linksError;
-    }
+    const { data: photos } = await supabase.from('UserPhoto').select('*').eq('userId', userInfo.id);
 
-    // 사용자 사진 정보 조회
-    const { data: photos, error: photosError } = await supabase
-      .from('UserPhoto')
-      .select('*')
-      .eq('userId', userInfo.id);
-
-    if (photosError) {
-      console.error('Photos fetch error:', photosError);
-      throw photosError;
-    }
-
-    // 구독 정보 조회
-    const { data: subscription, error: subscriptionError } = await supabase
+    const { data: subscription } = await supabase
       .from('Subscription')
       .select('*')
       .eq('userId', userInfo.id)
       .maybeSingle();
 
-    if (subscriptionError) {
-      console.error('Subscription fetch error:', subscriptionError);
-      throw subscriptionError;
-    }
-
-    // 인증 정보 조회
-    const { data: authInfo, error: authError } = await supabase
-      .from('UserAuth')
-      .select('*')
-      .eq('userId', userInfo.id)
-      .maybeSingle();
-
-    if (authError) {
-      console.error('Auth info fetch error:', authError);
-      throw authError;
-    }
-
-    // 모든 정보를 하나의 객체로 병합
+    // 모든 데이터를 하나의 객체로 병합
     const responseData = {
       ...userInfo,
       links: links || [],
       photos: photos || [],
-      subscription: subscription || null,
-      auth: authInfo || null
+      subscription: subscription || null
     };
 
     return new Response(JSON.stringify(responseData satisfies IUser), {

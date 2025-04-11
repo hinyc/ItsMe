@@ -132,6 +132,7 @@ export async function PUT(request: NextRequest) {
         comment,
         isPremium,
         links:UserLink (
+          id,
           linkName,
           icon,
           url,
@@ -193,6 +194,7 @@ export async function PUT(request: NextRequest) {
         comment,
         isPremium,
         links:UserLink (
+          id,
           linkName,
           icon,
           url,
