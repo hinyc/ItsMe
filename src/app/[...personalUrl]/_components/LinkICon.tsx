@@ -87,7 +87,7 @@ import {
 } from 'react-icons/fa';
 import { LinkIcon } from '@prisma/client/edge';
 
-const iconMap: Map<LinkIcon, IconType[]> = new Map([
+export const iconMap: Map<LinkIcon, IconType[]> = new Map([
   ['instagram', [RiInstagramLine, RiInstagramFill, SiInstagram, FaInstagram]],
   ['facebook', [RiFacebookBoxLine, RiFacebookFill, SiFacebook, FaFacebook]],
   ['x', [RiTwitterXLine, RiTwitterXFill, FaTwitter]],

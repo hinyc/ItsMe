@@ -1,8 +1,9 @@
-import React from 'react';
+import React, { useState } from 'react';
 import useMeStore from '../_store';
 import { PiLinkSimple } from 'react-icons/pi';
 import { LinkIcon } from '@prisma/client/edge';
 import LinkIconComponent from './LinkICon';
+import IconSelectModal from './IconSelectModal';
 
 interface URLBoxProps {
   name: string;
@@ -15,41 +16,6 @@ interface URLBoxProps {
   effect: string | null;
 }
 
-const availableIcons: LinkIcon[] = [
-  'instagram',
-  'facebook',
-  'x',
-  'linkedin',
-  'github',
-  'blog',
-  'wechat',
-  'tiktok',
-  'thread',
-  'youtube',
-  'discord',
-  'telegram',
-  'pinterest',
-  'reddit',
-  'spotify',
-  'behance',
-  'dribbble',
-  'medium',
-  'twitch',
-  'snapchat',
-  'notion',
-  'tistory',
-  'naver',
-  'heart',
-  'star',
-  'rocket',
-  'lightbulb',
-  'paw',
-  'ghost',
-  'dragon',
-  'cat',
-  'dog'
-];
-
 export default function URLBox({
   name,
   url,
@@ -60,11 +26,12 @@ export default function URLBox({
   icon,
   effect
 }: URLBoxProps) {
-  //effect 미사용중
   const { edit } = useMeStore();
+  const [isModalOpen, setIsModalOpen] = useState(false);
   const openUrl = () => {
     window.open(url, '_blank');
   };
+
   return (
     <div className={edit ? 'w-full' : 'w-fit'}>
       <div className="relative flex h-fit items-center">
@@ -77,17 +44,12 @@ export default function URLBox({
           />
         )}
         {edit ? (
-          <select
-            className="mr-1 h-5 w-5 cursor-pointer appearance-none bg-transparent"
-            value={icon}
-            onChange={(e) => onChangeIcon(e.target.value as LinkIcon)}
+          <button
+            onClick={() => setIsModalOpen(true)}
+            className="mr-1 flex h-5 w-5 items-center justify-center rounded-full hover:bg-gray-100"
           >
-            {availableIcons.map((iconType) => (
-              <option key={iconType} value={iconType}>
-                {iconType}
-              </option>
-            ))}
-          </select>
+            <LinkIconComponent iconType={icon} />
+          </button>
         ) : (
           <LinkIconComponent iconType={icon} />
         )}
@@ -126,6 +88,13 @@ export default function URLBox({
           )}
         </div>
       )}
+
+      <IconSelectModal
+        isOpen={isModalOpen}
+        onClose={() => setIsModalOpen(false)}
+        onSelect={onChangeIcon}
+        currentIcon={icon}
+      />
     </div>
   );
 }
