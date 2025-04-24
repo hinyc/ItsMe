@@ -9,12 +9,25 @@ export default function ModifyButton() {
   const { setShowMainNav } = useGlobalStore();
   const { edit, setEdit, nickname, email, image, phone, personalUrl, links, comment } =
     useMeStore();
-  const { mutate: updateUser } = useUpdateUserMutation();
+  const { mutateAsync: updateUser } = useUpdateUserMutation();
 
-  const _onClick = ({ payload }: { payload: UpdateUserPayload }) => {
+  const validateLinks = () => {
+    for (const link of links) {
+      console.log('링크 이름과 URL을 모두 입력해주세요.');
+      if (!link.linkName || !link.url) {
+        return false;
+      }
+    }
+    return true;
+  };
+
+  const _onClick = async ({ payload }: { payload: UpdateUserPayload }) => {
     setShowMainNav(false);
     if (edit) {
-      updateUser(payload);
+      console.log('~~33~', !validateLinks());
+      if (!validateLinks()) return;
+      const res = await updateUser(payload);
+      console.log('~~44~', res);
       return setEdit(false);
     }
 

@@ -6,13 +6,11 @@ import useMeStore from '../_store';
 import { ILink } from '@/types';
 import { LinkIcon } from '@prisma/client/edge';
 import userGlobalQuery from '@/common/query';
-import { useUpdateUserMutation } from '@/common/mutate';
-import { UpdateUserPayload } from '@/app/api/user/PUT';
+import ModifyButton from './ModifyButton';
 
 export default function Links() {
   const { edit, links, setLinks } = useMeStore();
-  const { data: user, refetch: refetchUser } = userGlobalQuery.useUser();
-  const { mutate: updateUser } = useUpdateUserMutation();
+  const { data: user } = userGlobalQuery.useUser();
 
   const handleLinkChange = (index: number, field: keyof ILink, value: string) => {
     const newLinks = [...links];
@@ -30,30 +28,6 @@ export default function Links() {
       effect: undefined
     };
     setLinks([...links, newLink]);
-  };
-
-  const handleUpdateUser = async () => {
-    if (!user) return;
-
-    const payload: UpdateUserPayload = {
-      links: links.map((link) => ({
-        id: link.id,
-        userId: user.id,
-        linkName: link.linkName,
-        url: link.url,
-        icon: link.icon,
-        effect: link.effect
-      }))
-    };
-
-    updateUser(payload, {
-      onSuccess: () => {
-        refetchUser();
-      },
-      onError: (error) => {
-        console.error('Failed to update user:', error);
-      }
-    });
   };
 
   return (
@@ -87,7 +61,7 @@ export default function Links() {
       ) : (
         <div className={`flex flex-wrap ${edit ? 'gap-y-3' : 'gap-y-1'}`}>
           {links.map((link, index) => {
-            if (!link.url) return null;
+            // if (link.url) return null;
             return (
               <URLBox
                 key={index}
