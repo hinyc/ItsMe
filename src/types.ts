@@ -1,3 +1,5 @@
+import { LinkIcon } from '@prisma/client/edge';
+
 export interface IUser {
   id: number;
   sub: string;
@@ -22,7 +24,7 @@ export interface ILink {
   userId: number;
   linkName: string;
   url: string;
-  icon: string;
+  icon: LinkIcon;
   effect?: string;
 }
 

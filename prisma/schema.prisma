@@ -62,6 +62,29 @@ enum LinkIcon {
   wechat
   tiktok
   thread
+  youtube
+  discord
+  telegram
+  pinterest
+  reddit
+  spotify
+  behance
+  dribbble
+  medium
+  twitch
+  snapchat
+  notion
+  tistory
+  naver
+  heart
+  star
+  rocket
+  lightbulb
+  paw
+  ghost
+  dragon
+  cat
+  dog
 }
 
 model UserLink {

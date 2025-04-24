@@ -10,16 +10,53 @@ interface URLBoxProps {
   onChangeUrl: (value: string) => void;
   onChangeEffect: (value: string) => void;
   onChangeName: (value: string) => void;
-  onChangeIcon: (value: string) => void;
+  onChangeIcon: (value: LinkIcon) => void;
   icon: LinkIcon;
   effect: string | null;
 }
+
+const availableIcons: LinkIcon[] = [
+  'instagram',
+  'facebook',
+  'x',
+  'linkedin',
+  'github',
+  'blog',
+  'wechat',
+  'tiktok',
+  'thread',
+  'youtube',
+  'discord',
+  'telegram',
+  'pinterest',
+  'reddit',
+  'spotify',
+  'behance',
+  'dribbble',
+  'medium',
+  'twitch',
+  'snapchat',
+  'notion',
+  'tistory',
+  'naver',
+  'heart',
+  'star',
+  'rocket',
+  'lightbulb',
+  'paw',
+  'ghost',
+  'dragon',
+  'cat',
+  'dog'
+];
+
 export default function URLBox({
   name,
   url,
   onChangeUrl,
   onChangeEffect,
   onChangeName,
+  onChangeIcon,
   icon,
   effect
 }: URLBoxProps) {
@@ -30,7 +67,7 @@ export default function URLBox({
   };
   return (
     <div className={edit ? 'w-full' : 'w-fit'}>
-      <div className="relative flex h-fit">
+      <div className="relative flex h-fit items-center">
         {!edit && (
           <a
             className="absolute z-10 h-full w-full"
@@ -39,7 +76,21 @@ export default function URLBox({
             rel="noopener noreferrer"
           />
         )}
-        <LinkIconComponent iconType={icon} />
+        {edit ? (
+          <select
+            className="mr-1 h-5 w-5 cursor-pointer appearance-none bg-transparent"
+            value={icon}
+            onChange={(e) => onChangeIcon(e.target.value as LinkIcon)}
+          >
+            {availableIcons.map((iconType) => (
+              <option key={iconType} value={iconType}>
+                {iconType}
+              </option>
+            ))}
+          </select>
+        ) : (
+          <LinkIconComponent iconType={icon} />
+        )}
         <input
           className={`font-semibold capitalize outline-none focus:border-me-highlight focus:outline-none disabled:bg-transparent ${edit ? 'mb-1 w-[120px] border-b-2 border-me-main transition-all' : 'max-w-[100px]'}`}
           disabled={!edit}

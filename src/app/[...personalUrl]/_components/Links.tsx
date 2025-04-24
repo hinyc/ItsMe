@@ -5,9 +5,13 @@ import URLBox from './URLBox';
 import useMeStore from '../_store';
 import { ILink } from '@/types';
 import { LinkIcon } from '@prisma/client/edge';
+import userGlobalQuery from '@/common/query';
 
 export default function Links() {
   const { edit, links, setLinks } = useMeStore();
+  const { data: user } = userGlobalQuery.useUser();
+
+  console.log(user);
 
   const handleLinkChange = (index: number, field: keyof ILink, value: string) => {
     const newLinks = [...links];
@@ -25,7 +29,7 @@ export default function Links() {
           return (
             <URLBox
               key={index}
-              icon={link.icon as LinkIcon}
+              icon={link.icon}
               name={link.linkName}
               url={link.url}
               effect={link.effect ?? null}
