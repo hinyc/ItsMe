@@ -4,6 +4,7 @@ import { PiLinkSimple } from 'react-icons/pi';
 import { LinkIcon } from '@prisma/client/edge';
 import LinkIconComponent from './LinkICon';
 import IconSelectModal from './IconSelectModal';
+import { allIcons } from './LinkICon';
 
 interface URLBoxProps {
   name: string;
@@ -11,8 +12,9 @@ interface URLBoxProps {
   onChangeUrl: (value: string) => void;
   onChangeEffect: (value: string) => void;
   onChangeName: (value: string) => void;
-  onChangeIcon: (value: LinkIcon) => void;
+  onChangeIcon: (value: LinkIcon, variant: string) => void;
   icon: LinkIcon;
+  iconVariant: string;
   effect: string | null;
 }
 
@@ -24,6 +26,7 @@ export default function URLBox({
   onChangeName,
   onChangeIcon,
   icon,
+  iconVariant,
   effect
 }: URLBoxProps) {
   const { edit } = useMeStore();
@@ -31,6 +34,8 @@ export default function URLBox({
   const openUrl = () => {
     window.open(url, '_blank');
   };
+
+  const currentIcon = allIcons.find((i) => i.type === icon && i.variant === iconVariant)?.icon;
 
   return (
     <div className={edit ? 'w-full' : 'w-fit'}>
@@ -48,10 +53,10 @@ export default function URLBox({
             onClick={() => setIsModalOpen(true)}
             className="mr-1 flex h-5 w-5 items-center justify-center rounded-full hover:bg-gray-100"
           >
-            <LinkIconComponent iconType={icon} />
+            <LinkIconComponent iconType={icon} variant={iconVariant} />
           </button>
         ) : (
-          <LinkIconComponent iconType={icon} />
+          <LinkIconComponent iconType={icon} variant={iconVariant} />
         )}
         <input
           className={`font-semibold capitalize outline-none focus:border-me-highlight focus:outline-none disabled:bg-transparent ${edit ? 'mb-1 w-[120px] border-b-2 border-me-main transition-all' : 'max-w-[100px]'}`}
@@ -94,6 +99,7 @@ export default function URLBox({
         onClose={() => setIsModalOpen(false)}
         onSelect={onChangeIcon}
         currentIcon={icon}
+        currentVariant={iconVariant}
       />
     </div>
   );

@@ -88,14 +88,15 @@ enum LinkIcon {
 }
 
 model UserLink {
-  id       Int      @id @default(autoincrement())
-  userId   Int
-  linkName String
-  url      String
-  icon     LinkIcon
-  effect   String?
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  linkName    String
+  url         String
+  icon        LinkIcon
+  iconVariant String   @default("line")
+  effect      String?
 
-  user     User     @relation(fields: [userId], references: [id])
+  user        User     @relation(fields: [userId], references: [id])
 }
 
 

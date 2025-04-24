@@ -25,6 +25,7 @@ export interface ILink {
   linkName: string;
   url: string;
   icon: LinkIcon;
+  iconVariant: string;
   effect?: string;
 }
 

@@ -12,7 +12,7 @@ export default function Links() {
   const { edit, links, setLinks } = useMeStore();
   const { data: user } = userGlobalQuery.useUser();
 
-  const handleLinkChange = (index: number, field: keyof ILink, value: string) => {
+  const handleLinkChange = <K extends keyof ILink>(index: number, field: K, value: ILink[K]) => {
     const newLinks = [...links];
     newLinks[index] = { ...newLinks[index], [field]: value };
     setLinks(newLinks);
@@ -25,6 +25,7 @@ export default function Links() {
       linkName: '',
       url: '',
       icon: 'instagram' as LinkIcon,
+      iconVariant: 'line',
       effect: undefined
     };
     setLinks([...links, newLink]);
@@ -60,22 +61,23 @@ export default function Links() {
         </div>
       ) : (
         <div className={`flex flex-wrap ${edit ? 'gap-y-3' : 'gap-y-1'}`}>
-          {links.map((link, index) => {
-            // if (link.url) return null;
-            return (
-              <URLBox
-                key={index}
-                icon={link.icon}
-                name={link.linkName}
-                url={link.url}
-                effect={link.effect ?? null}
-                onChangeUrl={(value) => handleLinkChange(index, 'url', value)}
-                onChangeEffect={(value) => handleLinkChange(index, 'effect', value)}
-                onChangeName={(value) => handleLinkChange(index, 'linkName', value)}
-                onChangeIcon={(value) => handleLinkChange(index, 'icon', value)}
-              />
-            );
-          })}
+          {links.map((link, index) => (
+            <URLBox
+              key={link.id}
+              icon={link.icon}
+              iconVariant={link.iconVariant || 'line'}
+              name={link.linkName}
+              url={link.url}
+              effect={link.effect ?? null}
+              onChangeUrl={(value) => handleLinkChange(index, 'url', value)}
+              onChangeEffect={(value) => handleLinkChange(index, 'effect', value)}
+              onChangeName={(value) => handleLinkChange(index, 'linkName', value)}
+              onChangeIcon={(value, variant) => {
+                handleLinkChange(index, 'icon', value);
+                handleLinkChange(index, 'iconVariant', variant);
+              }}
+            />
+          ))}
         </div>
       )}
     </div>
